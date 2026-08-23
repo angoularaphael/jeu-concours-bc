@@ -93,4 +93,7 @@ alter table public.portet_clients drop constraint if exists portet_clients_sourc
 alter table public.portet_clients add constraint portet_clients_source_check
   check (source in ('chatbot', 'csv', 'xls', 'manual', 'boxplus', 'concours'));
 
+alter table public.concours_contacts
+  add column if not exists tickets integer not null default 1;
+
 notify pgrst, 'reload schema';

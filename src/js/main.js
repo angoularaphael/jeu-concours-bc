@@ -1,4 +1,5 @@
 import { readInviteToken, readSource, track } from './track.js';
+import { bindOdds, bootMotion, celebrate } from './motion.js';
 
 const form = document.getElementById('form');
 const errorEl = document.getElementById('form-error');
@@ -11,6 +12,8 @@ document.getElementById('source').value = readSource();
 document.getElementById('invite_token').value = readInviteToken();
 
 track('page_vue');
+bootMotion();
+bindOdds(form);
 
 let started = false;
 form.addEventListener('focusin', () => {
@@ -33,10 +36,12 @@ async function loadInvite() {
   const tel = document.getElementById('telephone');
   tel.value = data.invite.telephone || '';
   tel.readOnly = true;
+  if (data.invite.email) document.getElementById('email').value = data.invite.email;
   if (data.invite.already_registered) {
     formWrap.hidden = true;
     confirmEl.hidden = false;
     alreadyEl.hidden = false;
+    celebrate(confirmEl);
   }
 }
 
@@ -71,11 +76,13 @@ form.addEventListener('submit', async (e) => {
         prenom: fd.get('ami1_prenom'),
         nom: fd.get('ami1_nom'),
         telephone: fd.get('ami1_telephone'),
+        email: fd.get('ami1_email'),
       },
       {
         prenom: fd.get('ami2_prenom'),
         nom: fd.get('ami2_nom'),
         telephone: fd.get('ami2_telephone'),
+        email: fd.get('ami2_email'),
       },
     ],
   };
@@ -97,6 +104,7 @@ form.addEventListener('submit', async (e) => {
     formWrap.hidden = true;
     confirmEl.hidden = false;
     if (data.already_registered) alreadyEl.hidden = false;
+    celebrate(confirmEl);
     confirmEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
   } catch {
     showError('Réseau indisponible. Réessaie dans un instant.');

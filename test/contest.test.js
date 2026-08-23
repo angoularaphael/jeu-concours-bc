@@ -51,6 +51,31 @@ describe('parseEntry', () => {
     assert.equal(withMail.ok, true);
     assert.equal(withMail.data.email, 'camille@test.fr');
   });
+
+  it('compte un ticket par email (participant + ami(e)s)', async () => {
+    const { ticketCount } = await import('../lib/contest.js');
+    assert.equal(ticketCount({ email: null, friends: [{}, {}] }), 1);
+    assert.equal(
+      ticketCount({
+        email: 'a@b.c',
+        friends: [{ email: 'c@d.e' }, { email: 'e@f.g' }],
+      }),
+      4
+    );
+  });
+
+  it('accepte l’email optionnel d’un ami(e)', () => {
+    const parsed = parseEntry({
+      ...valid,
+      friends: [
+        { prenom: 'Leo', nom: 'Martin', telephone: '0622222222', email: 'leo@test.fr' },
+        { prenom: 'Nina', nom: 'Bernard', telephone: '0633333333' },
+      ],
+    });
+    assert.equal(parsed.ok, true);
+    assert.equal(parsed.data.friends[0].email, 'leo@test.fr');
+    assert.equal(parsed.data.friends[1].email, null);
+  });
 });
 
 describe('enterContest', () => {

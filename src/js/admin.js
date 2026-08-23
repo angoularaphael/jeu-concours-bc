@@ -38,6 +38,7 @@ async function load(filters = {}) {
     kpiCard('Form. validés', data.kpis.form_submitted),
     kpiCard('Inscrits', data.kpis.inscrits),
     kpiCard('Avec email (boost)', data.kpis.with_email),
+    kpiCard('Tickets chances', data.kpis.tickets_total),
     kpiCard('Ami(e)s invité(e)s', data.kpis.amis_invites),
     kpiCard('Ami(e)s finalisé(e)s', data.kpis.amis_finalises),
     kpiCard('Taux invité→inscrit', `${data.kpis.taux_invite_inscrit} %`),
