@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Jeu concours 10 ans Boxing Center — 10 abonnements à gagner</title>
+<meta name="description" content="Boxing Center fête ses 10 ans : 10 abonnements 12 mois d'une valeur de 400 € à gagner. 1 gagnant par soir pendant 10 jours dès le 01/09/2026. Inscris-toi et invite 2 ami(e)s." />
+<meta name="robots" content="noindex, nofollow, noarchive" />
+<meta name="theme-color" content="#080808" />
+<meta name="color-scheme" content="dark" />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="fr_FR" />
+<meta property="og:site_name" content="Boxing Center" />
+<meta property="og:title" content="10 ans Boxing Center — 10 abonnements 12 mois à gagner" />
+<meta property="og:description" content="Valeur 400 € chacun. 1 gagnant chaque soir pendant 10 jours dès le 01/09/2026. Invite 2 ami(e)s." />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="icon" href="/favicon.ico" sizes="any" />
+<link rel="apple-touch-icon" href="/favicon-192.png" />
+<link rel="stylesheet" href="/src/styles/index.css" />
+</head>
+<body>
+<a class="skip" href="#formulaire">Aller au formulaire</a>
+
+<header class="top">
+  <img class="logo" src="/img/logo-bc-centre-blanc-520.png" width="160" height="52" alt="Boxing Center" />
+</header>
+
+<section class="hero" id="accroche">
+  <p class="eyebrow">Jeu concours</p>
+  <h1>Boxing Center<br />fête ses <span class="accent">10 ans</span></h1>
+  <p class="lede">Pour l'occasion, Boxing Center offre <strong>10 abonnements 12 mois</strong> à gagner.</p>
+  <div class="prizes">
+    <div class="prize">
+      <span class="prize-n">10</span>
+      <span class="prize-l">abonnements<br />12 mois</span>
+    </div>
+    <div class="prize">
+      <span class="prize-n">400&nbsp;€</span>
+      <span class="prize-l">valeur de<br />chaque abo</span>
+    </div>
+    <div class="prize">
+      <span class="prize-n">10</span>
+      <span class="prize-l">gagnants<br />10 soirs</span>
+    </div>
+  </div>
+  <a class="btn" href="#formulaire">Je participe</a>
+</section>
+
+<section class="rules" id="mecanique">
+  <h2>Comment ça marche</h2>
+  <ul>
+    <li>1 gagnant tiré au sort <strong>chaque soir</strong></li>
+    <li>Tirage pendant <strong>10 jours</strong></li>
+    <li>Début le <strong>01/09/2026</strong></li>
+    <li>Inscription simple via le formulaire</li>
+    <li>Invite <strong>2 ami(e)s</strong> — ils peuvent aussi gagner</li>
+  </ul>
+  <p class="promise">Tu peux gagner un abonnement 12 mois d'une valeur de 400&nbsp;€, et tes 2 ami(e)s peuvent aussi participer.</p>
+</section>
+
+<section class="form-wrap" id="formulaire">
+  <h2 id="form-title">Je m'inscris</h2>
+  <p class="form-lead" id="form-lead">Tes infos, puis celles de 2 ami(e)s. Ils recevront un WhatsApp pour finaliser.</p>
+
+  <form id="form" novalidate>
+    <input type="hidden" name="invite_token" id="invite_token" />
+    <input type="hidden" name="source" id="source" />
+
+    <fieldset>
+      <legend>Toi</legend>
+      <div class="grid">
+        <label>Prénom *
+          <input name="prenom" id="prenom" autocomplete="given-name" required maxlength="80" />
+        </label>
+        <label>Nom *
+          <input name="nom" id="nom" autocomplete="family-name" required maxlength="80" />
+        </label>
+      </div>
+      <label>Téléphone *
+        <input name="telephone" id="telephone" type="tel" inputmode="tel" autocomplete="tel" required placeholder="06 12 34 56 78" />
+      </label>
+      <details class="optional">
+        <summary>Infos optionnelles (salle, email, ville)</summary>
+        <label>Email
+          <input name="email" id="email" type="email" autocomplete="email" maxlength="160" />
+        </label>
+        <label>Salle Boxing Center la plus proche
+          <select name="salle" id="salle">
+            <option value="">Je ne sais pas encore</option>
+            <option value="minimes">Minimes</option>
+            <option value="st-cyprien">Saint-Cyprien</option>
+            <option value="ramonville">Ramonville</option>
+            <option value="etats-unis">États-Unis</option>
+            <option value="portet">Portet</option>
+          </select>
+        </label>
+        <label>Ville
+          <input name="ville" id="ville" autocomplete="address-level2" maxlength="80" />
+        </label>
+      </details>
+    </fieldset>
+
+    <fieldset>
+      <legend>Ami(e) 1</legend>
+      <div class="grid">
+        <label>Prénom *
+          <input name="ami1_prenom" required maxlength="80" />
+        </label>
+        <label>Nom *
+          <input name="ami1_nom" required maxlength="80" />
+        </label>
+      </div>
+      <label>Téléphone *
+        <input name="ami1_telephone" type="tel" inputmode="tel" required placeholder="06 …" />
+      </label>
+    </fieldset>
+
+    <fieldset>
+      <legend>Ami(e) 2</legend>
+      <div class="grid">
+        <label>Prénom *
+          <input name="ami2_prenom" required maxlength="80" />
+        </label>
+        <label>Nom *
+          <input name="ami2_nom" required maxlength="80" />
+        </label>
+      </div>
+      <label>Téléphone *
+        <input name="ami2_telephone" type="tel" inputmode="tel" required placeholder="06 …" />
+      </label>
+    </fieldset>
+
+    <fieldset class="checks">
+      <legend class="sr">Consentements</legend>
+      <label class="check"><input type="checkbox" name="consent_age" required /> J'ai 18 ans (ou l'accord d'un responsable légal).</label>
+      <label class="check"><input type="checkbox" name="consent_reglement" required /> J'accepte le <a href="/reglement.html" target="_blank" rel="noopener">règlement du jeu</a>.</label>
+      <label class="check"><input type="checkbox" name="consent_wa" required /> J'accepte d'être contacté(e) par WhatsApp par Boxing Center.</label>
+      <label class="check"><input type="checkbox" name="consent_friends" required /> Je confirme avoir l'accord de mes 2 ami(e)s pour transmettre leurs numéros.</label>
+    </fieldset>
+
+    <p class="form-error" id="form-error" hidden></p>
+    <button class="btn" type="submit" id="submit">Valider ma participation</button>
+  </form>
+</section>
+
+<section class="confirm" id="confirm" hidden>
+  <h2>Ta participation est enregistrée</h2>
+  <p>Tu vas recevoir une confirmation par WhatsApp.</p>
+  <p>Tes 2 ami(e)s recevront également un message pour finaliser leur inscription au jeu concours.</p>
+  <p class="already" id="already" hidden>Ce numéro était déjà inscrit. Aucun nouveau message n'a été envoyé.</p>
+</section>
+
+<footer class="foot">
+  <p>Boxing Center — jeu concours 10 ans. Données utilisées pour l'inscription, les messages WhatsApp et les communications du club. <a href="/reglement.html">Règlement et RGPD</a>.</p>
+  <p class="muted">Page hors site vitrine. Accès par liens privés uniquement.</p>
+</footer>
+
+<script type="module" src="/src/js/main.js"></script>
+</body>
+</html>
