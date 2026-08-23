@@ -12,6 +12,9 @@ Hors WordPress, boutique et menus publics (`robots.txt` = `Disallow: /`).
 
 Importer [github.com/angoularaphael/jeu-concours-bc](https://github.com/angoularaphael/jeu-concours-bc) dans Vercel.
 
+Fichier local déjà généré (gitignoré) : `.env.production`.  
+Dans Vercel : **Settings → Environment Variables → Import .env** et coller ce fichier, environnement **Production** uniquement. Ne pas cocher `DRY_RUN`.
+
 Variables **Production** (pas de `DRY_RUN`) :
 
 | Variable | Rôle |
