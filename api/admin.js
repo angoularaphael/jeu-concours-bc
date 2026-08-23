@@ -1,5 +1,6 @@
 import '../lib/load-env.js';
-import { adminTokenOk, json, queryFromUrl } from '../lib/http.js';
+import { json, queryFromUrl, readBody } from '../lib/http.js';
+import { adminTokenOk, verifyAdminLogin } from '../lib/admin-auth.js';
 import { kpis } from '../lib/contest.js';
 import { listContacts, listEvents, listInvites, listQueueAll } from '../lib/store.js';
 
@@ -15,6 +16,23 @@ export default async function handler(req, res) {
     res.end();
     return;
   }
+  if (req.method === 'POST') {
+    let body = {};
+    try {
+      body = await readBody(req);
+    } catch {
+      json(res, 400, { ok: false, error: 'invalid_json' });
+      return;
+    }
+    const result = verifyAdminLogin(body);
+    if (!result.ok) {
+      json(res, 401, { ok: false, error: result.error || 'unauthorized' });
+      return;
+    }
+    json(res, 200, { ok: true, token: result.token });
+    return;
+  }
+
   if (req.method !== 'GET') {
     json(res, 405, { ok: false, error: 'method' });
     return;
@@ -100,6 +118,7 @@ export default async function handler(req, res) {
     contacts: contacts.map((c) => ({
       ...c,
       contacts_generes: stats.generated_by[c.id] || 0,
+      chance_boost: Boolean(c.email),
     })),
   });
 }

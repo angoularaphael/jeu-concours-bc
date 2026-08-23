@@ -20,6 +20,23 @@ export default defineConfig({
       },
     },
   },
+  plugins: [
+    {
+      name: 'admin-clean-url',
+      configureServer(server) {
+        server.middlewares.use((req, _res, next) => {
+          if (req.url === '/admin' || req.url === '/admin/') req.url = '/admin.html';
+          next();
+        });
+      },
+      configurePreviewServer(server) {
+        server.middlewares.use((req, _res, next) => {
+          if (req.url === '/admin' || req.url === '/admin/') req.url = '/admin.html';
+          next();
+        });
+      },
+    },
+  ],
   build: {
     rollupOptions: {
       input: {

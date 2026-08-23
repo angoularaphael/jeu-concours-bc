@@ -55,6 +55,7 @@
     <li>Début le <strong>01/09/2026</strong></li>
     <li>Inscription simple via le formulaire</li>
     <li>Invite <strong>2 ami(e)s</strong> — ils peuvent aussi gagner</li>
+    <li>L’email est <strong>optionnel</strong> — le renseigner <strong>augmente tes chances</strong></li>
   </ul>
   <p class="promise">Tu peux gagner un abonnement 12 mois d'une valeur de 400&nbsp;€, et tes 2 ami(e)s peuvent aussi participer.</p>
 </section>
@@ -80,11 +81,12 @@
       <label>Téléphone *
         <input name="telephone" id="telephone" type="tel" inputmode="tel" autocomplete="tel" required placeholder="06 12 34 56 78" />
       </label>
+      <label>Email <span class="opt">(optionnel — augmente tes chances)</span>
+        <input name="email" id="email" type="email" autocomplete="email" maxlength="160" placeholder="toi@email.com" />
+      </label>
+      <p class="hint">Tu peux valider sans email. Si tu le laisses, tu es mieux identifié au tirage et tes chances augmentent.</p>
       <details class="optional">
-        <summary>Infos optionnelles (salle, email, ville)</summary>
-        <label>Email
-          <input name="email" id="email" type="email" autocomplete="email" maxlength="160" />
-        </label>
+        <summary>Infos optionnelles (salle, ville)</summary>
         <label>Salle Boxing Center la plus proche
           <select name="salle" id="salle">
             <option value="">Je ne sais pas encore</option>

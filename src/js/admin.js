@@ -37,6 +37,7 @@ async function load(filters = {}) {
     kpiCard('Form. commencés', data.kpis.form_started),
     kpiCard('Form. validés', data.kpis.form_submitted),
     kpiCard('Inscrits', data.kpis.inscrits),
+    kpiCard('Avec email (boost)', data.kpis.with_email),
     kpiCard('Ami(e)s invité(e)s', data.kpis.amis_invites),
     kpiCard('Ami(e)s finalisé(e)s', data.kpis.amis_finalises),
     kpiCard('Taux invité→inscrit', `${data.kpis.taux_invite_inscrit} %`),
@@ -52,6 +53,7 @@ async function load(filters = {}) {
       fmtDate(c.created_at),
       `${c.prenom || ''} ${c.nom || ''}`.trim(),
       c.telephone || '',
+      c.email || '—',
       c.role || '',
       c.status || '',
       c.wa_status || '',
@@ -68,16 +70,33 @@ async function load(filters = {}) {
   exportLink.href = `/api/admin?token=${encodeURIComponent(token())}&export=csv`;
 }
 
+async function loginWith(payload) {
+  const res = await fetch('/api/admin', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok || !data.token) throw new Error(data.error || 'unauthorized');
+  sessionStorage.setItem(KEY, data.token);
+}
+
 document.getElementById('login-form').addEventListener('submit', async (e) => {
   e.preventDefault();
-  sessionStorage.setItem(KEY, document.getElementById('token').value);
+  loginError.hidden = true;
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  const jeton = document.getElementById('token').value.trim();
   try {
+    if (email && password) await loginWith({ email, password });
+    else if (jeton) await loginWith({ token: jeton });
+    else throw new Error('empty');
     await load();
     login.hidden = true;
     dash.hidden = false;
-  } catch (err) {
+  } catch {
     loginError.hidden = false;
-    loginError.textContent = 'Jeton refusé.';
+    loginError.textContent = 'Identifiants ou jeton refusés.';
     sessionStorage.removeItem(KEY);
   }
 });

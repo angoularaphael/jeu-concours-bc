@@ -19,6 +19,7 @@ const routes = [
   { method: 'GET', test: (p) => p.startsWith('/api/cron-wa'), handler: cronWa },
   { method: 'POST', test: (p) => p.startsWith('/api/cron-wa'), handler: cronWa },
   { method: 'GET', test: (p) => p.startsWith('/api/admin'), handler: admin },
+  { method: 'POST', test: (p) => p.startsWith('/api/admin'), handler: admin },
   { method: 'OPTIONS', test: (p) => p.startsWith('/api/admin'), handler: admin },
 ];
 

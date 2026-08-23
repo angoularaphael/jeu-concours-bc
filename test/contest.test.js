@@ -40,6 +40,17 @@ describe('parseEntry', () => {
     });
     assert.equal(parsed.ok, false);
   });
+
+  it('accepte un email vide et refuse un email invalide', () => {
+    const sans = parseEntry(valid);
+    assert.equal(sans.ok, true);
+    assert.equal(sans.data.email, null);
+    const bad = parseEntry({ ...valid, email: 'pas-un-email' });
+    assert.equal(bad.ok, false);
+    const withMail = parseEntry({ ...valid, email: 'camille@test.fr' });
+    assert.equal(withMail.ok, true);
+    assert.equal(withMail.data.email, 'camille@test.fr');
+  });
 });
 
 describe('enterContest', () => {
@@ -118,5 +129,17 @@ describe('enterContest', () => {
     );
     assert.equal(second.ok, true, JSON.stringify(second));
     assert.equal(second.participant.status, 'inscription_finalisee');
+  });
+});
+
+describe('verifyAdminLogin', () => {
+  it('accepte le jeton ou les identifiants boutique', async () => {
+    const { verifyAdminLogin } = await import('../lib/admin-auth.js');
+    process.env.ADMIN_TOKEN = 'tok-test';
+    process.env.SUPER_ADMIN_EMAIL = 'admin@boxingcenter.fr';
+    process.env.SUPER_ADMIN_PASSWORD = 'secret-admin';
+    assert.equal(verifyAdminLogin({ token: 'tok-test' }).ok, true);
+    assert.equal(verifyAdminLogin({ email: 'admin@boxingcenter.fr', password: 'secret-admin' }).ok, true);
+    assert.equal(verifyAdminLogin({ email: 'admin@boxingcenter.fr', password: 'nope' }).ok, false);
   });
 });
