@@ -96,4 +96,7 @@ alter table public.portet_clients add constraint portet_clients_source_check
 alter table public.concours_contacts
   add column if not exists tickets integer not null default 1;
 
+alter table public.concours_contacts
+  add column if not exists avis jsonb not null default '[]'::jsonb;
+
 notify pgrst, 'reload schema';

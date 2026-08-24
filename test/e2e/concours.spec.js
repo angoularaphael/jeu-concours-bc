@@ -21,9 +21,9 @@ test('inscription complète', async ({ page }) => {
   await page.locator('[name="ami2_nom"]').fill('Bernard');
   await page.locator('[name="ami2_telephone"]').fill('0633333333');
   await page.getByRole('button', { name: /Continuer/i }).click();
+  await page.getByRole('button', { name: /Continuer/i }).click();
   await page.locator('[name="consent_age"]').check();
   await page.locator('[name="consent_reglement"]').check();
-  await page.locator('[name="consent_wa"]').check();
   await page.locator('[name="consent_friends"]').check();
   await page.getByRole('button', { name: /Valider ma participation/i }).click();
   await expect(page.getByRole('heading', { name: /participation est enregistrée/i })).toBeVisible();

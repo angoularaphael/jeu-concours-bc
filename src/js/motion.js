@@ -184,8 +184,6 @@ function bootMagnetic() {
   });
 }
 
-const EMAIL_OK = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
 export function bindOdds(form) {
   const label = document.getElementById('odds-label');
   const pips = document.querySelectorAll('#odds-pips i');
@@ -193,12 +191,11 @@ export function bindOdds(form) {
   const bump = document.getElementById('odds-bump');
   if (!form || !label || !pips.length) return;
   let last = 1;
-  const fields = ['email', 'ami1_email', 'ami2_email'].map((name) => form.elements[name]);
 
   const update = () => {
     let n = 1;
-    for (const f of fields) {
-      if (f && EMAIL_OK.test(String(f.value || '').trim())) n += 1;
+    for (const el of form.querySelectorAll('[name^="avis_proof_"]')) {
+      if (String(el.value || '').startsWith('data:image/')) n += 1;
     }
     label.textContent = `×${n}`;
     pips.forEach((pip, i) => pip.classList.toggle('is-on', i < n));
@@ -222,6 +219,8 @@ export function bindOdds(form) {
   };
 
   form.addEventListener('input', update);
+  form.addEventListener('change', update);
+  form.addEventListener('odds-refresh', update);
   update();
 }
 

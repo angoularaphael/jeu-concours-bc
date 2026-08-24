@@ -81,8 +81,8 @@
 
   <div class="ticker" aria-hidden="true">
     <div class="ticker__track">
-      <span>10 abonnements ◆ 400 € ◆ 1 gagnant / soir ◆ 10 jours ◆ invite 2 ami(e)s ◆ emails = plus de chances ◆ </span>
-      <span>10 abonnements ◆ 400 € ◆ 1 gagnant / soir ◆ 10 jours ◆ invite 2 ami(e)s ◆ emails = plus de chances ◆ </span>
+      <span>10 abonnements ◆ 400 € ◆ 1 gagnant / soir ◆ 10 jours ◆ invite 2 ami(e)s ◆ 3 avis Google = plus de chances ◆ </span>
+      <span>10 abonnements ◆ 400 € ◆ 1 gagnant / soir ◆ 10 jours ◆ invite 2 ami(e)s ◆ 3 avis Google = plus de chances ◆ </span>
     </div>
   </div>
 </section>
@@ -104,7 +104,7 @@
     <li class="round" data-reveal>
       <span class="round__n">03</span>
       <h3>Boost tes chances</h3>
-      <p>Ton email, et les leurs. Chaque email = +1 ticket. Jusqu’à x4.</p>
+      <p>3 avis Google. Tu tires une salle au hasard, tu laisses l’avis, tu envoies le screen. Chaque avis = +1 ticket. Jusqu’à x4.</p>
     </li>
   </ol>
   <p class="promise" data-reveal>Tirage chaque soir pendant 10 jours, dès le <strong>1er septembre 2026</strong>.</p>
@@ -117,22 +117,22 @@
     <div class="odds__pips" id="odds-pips">
       <i class="is-on"></i><i></i><i></i><i></i>
     </div>
-    <p class="odds__hint">Chaque email valide = +1 ticket</p>
+    <p class="odds__hint">Chaque avis Google (avec screen) = +1 ticket</p>
     <span class="odds__bump" id="odds-bump" aria-hidden="true">+1</span>
   </aside>
   <div class="card" data-reveal>
     <div class="card__corner" aria-hidden="true"></div>
     <p class="kicker">Carte d’entrée</p>
     <h2 id="form-title">Je m'inscris</h2>
-    <p class="form-lead" id="form-lead">Tes infos d’abord. Ensuite tes 2 ami(e)s, un par un.</p>
+    <p class="form-lead" id="form-lead">Tes infos d’abord. Ensuite tes 2 ami(e)s, puis tes avis Google.</p>
 
     <div class="stepper" id="stepper" aria-label="Progression">
       <div class="stepper__top">
-        <span id="step-label">Round 1 / 4</span>
+        <span id="step-label">Round 1 / 5</span>
         <strong id="step-name">Toi</strong>
       </div>
       <div class="stepper__pips" id="step-pips" aria-hidden="true">
-        <i class="is-on"></i><i></i><i></i><i></i>
+        <i class="is-on"></i><i></i><i></i><i></i><i></i>
       </div>
     </div>
 
@@ -140,7 +140,7 @@
       <input type="hidden" name="invite_token" id="invite_token" />
       <input type="hidden" name="source" id="source" />
 
-      <fieldset class="step is-on" data-step="0" data-title="Toi" data-lead="Nom, prénom, téléphone. L’email booste tes chances.">
+      <fieldset class="step is-on" data-step="0" data-title="Toi" data-lead="Nom, prénom, téléphone. Ensuite tes 2 ami(e)s, puis tes avis Google.">
         <legend>Toi</legend>
         <div class="grid">
           <label>Prénom *
@@ -152,9 +152,6 @@
         </div>
         <label>Téléphone *
           <input name="telephone" id="telephone" type="tel" inputmode="tel" autocomplete="tel" required placeholder="06 12 34 56 78" />
-        </label>
-        <label>Email <span class="opt">optionnel · +1 ticket</span>
-          <input name="email" id="email" type="email" autocomplete="email" maxlength="160" placeholder="toi@email.com" data-odds />
         </label>
         <details class="optional">
           <summary>Salle et ville</summary>
@@ -174,7 +171,7 @@
         </details>
       </fieldset>
 
-      <fieldset class="step" data-step="1" data-title="Ami(e) 1" data-lead="Il ou elle reçoit un WhatsApp pour finaliser. Email optionnel = +1 ticket pour toi." hidden>
+      <fieldset class="step" data-step="1" data-title="Ami(e) 1" data-lead="Il ou elle reçoit un WhatsApp pour finaliser." hidden>
         <legend>Ami(e) 1</legend>
         <div class="grid">
           <label>Prénom *
@@ -187,12 +184,9 @@
         <label>Téléphone *
           <input name="ami1_telephone" type="tel" inputmode="tel" required placeholder="06 …" />
         </label>
-        <label>Email <span class="opt">optionnel · +1 ticket pour toi</span>
-          <input name="ami1_email" type="email" maxlength="160" placeholder="ami@email.com" data-odds />
-        </label>
       </fieldset>
 
-      <fieldset class="step" data-step="2" data-title="Ami(e) 2" data-lead="Le deuxième ami(e). Même règle : email optionnel = encore +1 ticket." hidden>
+      <fieldset class="step" data-step="2" data-title="Ami(e) 2" data-lead="Le deuxième ami(e). Même infos : prénom, nom, téléphone." hidden>
         <legend>Ami(e) 2</legend>
         <div class="grid">
           <label>Prénom *
@@ -205,16 +199,61 @@
         <label>Téléphone *
           <input name="ami2_telephone" type="tel" inputmode="tel" required placeholder="06 …" />
         </label>
-        <label>Email <span class="opt">optionnel · +1 ticket pour toi</span>
-          <input name="ami2_email" type="email" maxlength="160" placeholder="ami@email.com" data-odds />
-        </label>
       </fieldset>
 
-      <fieldset class="checks step" data-step="3" data-title="Validation" data-lead="Dernier round. Coche les cases, puis tu es dans le tirage." hidden>
+      <fieldset class="step" data-step="3" data-title="Avis Google" data-lead="Optionnel. Tire une salle au hasard, laisse l’avis, envoie le screen. Jusqu’à 3 avis = x4." hidden>
+        <legend>3 avis Google</legend>
+        <p class="avis-intro">Clique sur <strong>Tirer une salle</strong> : une des 5 fiches Boxing Center s’ouvre. Laisse l’avis, reviens, et charge le screen. Chaque preuve = +1 ticket.</p>
+        <div class="avis-list" id="avis-list">
+          <article class="avis-card" data-avis="0">
+            <span class="avis-card__n">01</span>
+            <button type="button" class="btn btn-ghost avis-draw">Tirer une salle</button>
+            <div class="avis-picked" hidden>
+              <strong class="avis-name"></strong>
+              <a class="avis-link" target="_blank" rel="noopener">Ouvrir la fiche Google</a>
+              <label>Screen de ton avis
+                <input type="file" accept="image/*" class="avis-file" />
+              </label>
+              <p class="avis-ok" hidden>Preuve ajoutée · +1 ticket</p>
+            </div>
+            <input type="hidden" name="avis_salle_0" />
+            <input type="hidden" name="avis_proof_0" />
+          </article>
+          <article class="avis-card" data-avis="1">
+            <span class="avis-card__n">02</span>
+            <button type="button" class="btn btn-ghost avis-draw">Tirer une salle</button>
+            <div class="avis-picked" hidden>
+              <strong class="avis-name"></strong>
+              <a class="avis-link" target="_blank" rel="noopener">Ouvrir la fiche Google</a>
+              <label>Screen de ton avis
+                <input type="file" accept="image/*" class="avis-file" />
+              </label>
+              <p class="avis-ok" hidden>Preuve ajoutée · +1 ticket</p>
+            </div>
+            <input type="hidden" name="avis_salle_1" />
+            <input type="hidden" name="avis_proof_1" />
+          </article>
+          <article class="avis-card" data-avis="2">
+            <span class="avis-card__n">03</span>
+            <button type="button" class="btn btn-ghost avis-draw">Tirer une salle</button>
+            <div class="avis-picked" hidden>
+              <strong class="avis-name"></strong>
+              <a class="avis-link" target="_blank" rel="noopener">Ouvrir la fiche Google</a>
+              <label>Screen de ton avis
+                <input type="file" accept="image/*" class="avis-file" />
+              </label>
+              <p class="avis-ok" hidden>Preuve ajoutée · +1 ticket</p>
+            </div>
+            <input type="hidden" name="avis_salle_2" />
+            <input type="hidden" name="avis_proof_2" />
+          </article>
+        </div>
+      </fieldset>
+
+      <fieldset class="checks step" data-step="4" data-title="Validation" data-lead="Dernier round. Coche les cases, puis tu es dans le tirage." hidden>
         <legend>Consentements</legend>
         <label class="check"><input type="checkbox" name="consent_age" required /> J'ai 18 ans (ou l'accord d'un responsable légal).</label>
         <label class="check"><input type="checkbox" name="consent_reglement" required /> J'accepte le <a href="/reglement.html" target="_blank" rel="noopener">règlement du jeu</a>.</label>
-        <label class="check"><input type="checkbox" name="consent_wa" required /> J'accepte d'être contacté(e) par WhatsApp par Boxing Center.</label>
         <label class="check"><input type="checkbox" name="consent_friends" required /> Je confirme avoir l'accord de mes 2 ami(e)s pour transmettre leurs coordonnées.</label>
       </fieldset>
 
@@ -238,7 +277,7 @@
 </section>
 
 <footer class="foot">
-  <p>Boxing Center — jeu concours 10 ans. Données utilisées pour l'inscription, les messages WhatsApp et les communications du club. <a href="/reglement.html">Règlement et RGPD</a>.</p>
+  <p>Boxing Center — jeu concours 10 ans. <a href="/reglement.html">Règlement</a>.</p>
   <p class="muted">Page hors site vitrine. Accès par liens privés uniquement.</p>
 </footer>
 

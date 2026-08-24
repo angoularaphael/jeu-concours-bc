@@ -14,7 +14,6 @@ const valid = {
   telephone: '0611111111',
   consent_age: true,
   consent_reglement: true,
-  consent_wa: true,
   consent_friends: true,
   source: 'story',
   friends: [
@@ -41,40 +40,39 @@ describe('parseEntry', () => {
     assert.equal(parsed.ok, false);
   });
 
-  it('accepte un email vide et refuse un email invalide', () => {
+  it('accepte une inscription sans avis et compte +1 ticket par avis', () => {
     const sans = parseEntry(valid);
     assert.equal(sans.ok, true);
-    assert.equal(sans.data.email, null);
-    const bad = parseEntry({ ...valid, email: 'pas-un-email' });
-    assert.equal(bad.ok, false);
-    const withMail = parseEntry({ ...valid, email: 'camille@test.fr' });
-    assert.equal(withMail.ok, true);
-    assert.equal(withMail.data.email, 'camille@test.fr');
+    assert.equal(sans.data.avis.length, 0);
+    const proof = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';
+    const withAvis = parseEntry({
+      ...valid,
+      avis: [
+        { salle: 'minimes', proof },
+        { salle: 'portet', proof },
+      ],
+    });
+    assert.equal(withAvis.ok, true, JSON.stringify(withAvis.errors));
+    assert.equal(withAvis.data.avis.length, 2);
   });
 
-  it('compte un ticket par email (participant + ami(e)s)', async () => {
+  it('compte un ticket par avis Google (max x4)', async () => {
     const { ticketCount } = await import('../lib/contest.js');
-    assert.equal(ticketCount({ email: null, friends: [{}, {}] }), 1);
+    assert.equal(ticketCount({ avis: [] }), 1);
     assert.equal(
       ticketCount({
-        email: 'a@b.c',
-        friends: [{ email: 'c@d.e' }, { email: 'e@f.g' }],
+        avis: [{ salle: 'minimes' }, { salle: 'portet' }, { salle: 'st-cyprien' }],
       }),
       4
     );
   });
 
-  it('accepte l’email optionnel d’un ami(e)', () => {
+  it('refuse un avis sans screen', () => {
     const parsed = parseEntry({
       ...valid,
-      friends: [
-        { prenom: 'Leo', nom: 'Martin', telephone: '0622222222', email: 'leo@test.fr' },
-        { prenom: 'Nina', nom: 'Bernard', telephone: '0633333333' },
-      ],
+      avis: [{ salle: 'minimes', proof: '' }],
     });
-    assert.equal(parsed.ok, true);
-    assert.equal(parsed.data.friends[0].email, 'leo@test.fr');
-    assert.equal(parsed.data.friends[1].email, null);
+    assert.equal(parsed.ok, false);
   });
 });
 
@@ -143,7 +141,6 @@ describe('enterContest', () => {
         invite_token: ami.invite_token,
         consent_age: true,
         consent_reglement: true,
-        consent_wa: true,
         consent_friends: true,
         friends: [
           { prenom: 'Eve', nom: 'Petit', telephone: '0655555555' },

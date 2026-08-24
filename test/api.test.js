@@ -41,7 +41,6 @@ const valid = {
   telephone: '0677777777',
   consent_age: true,
   consent_reglement: true,
-  consent_wa: true,
   consent_friends: true,
   source: 'meta',
   friends: [

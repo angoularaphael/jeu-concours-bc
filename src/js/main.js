@@ -1,5 +1,6 @@
 import { readInviteToken, readSource, track } from './track.js';
 import { bindOdds, bootMotion, celebrate } from './motion.js';
+import { bindAvis, collectAvis } from './avis.js';
 
 const form = document.getElementById('form');
 const errorEl = document.getElementById('form-error');
@@ -14,6 +15,7 @@ document.getElementById('invite_token').value = readInviteToken();
 track('page_vue');
 bootMotion();
 bindOdds(form);
+bindAvis(form);
 bindSteps(form);
 
 let started = false;
@@ -37,7 +39,6 @@ async function loadInvite() {
   const tel = document.getElementById('telephone');
   tel.value = data.invite.telephone || '';
   tel.readOnly = true;
-  if (data.invite.email) document.getElementById('email').value = data.invite.email;
   if (data.invite.already_registered) {
     formWrap.hidden = true;
     confirmEl.hidden = false;
@@ -137,27 +138,24 @@ form.addEventListener('submit', async (e) => {
     prenom: fd.get('prenom'),
     nom: fd.get('nom'),
     telephone: fd.get('telephone'),
-    email: fd.get('email'),
     salle: fd.get('salle'),
     ville: fd.get('ville'),
     source: fd.get('source') || readSource(),
     invite_token: fd.get('invite_token') || readInviteToken(),
     consent_age: fd.get('consent_age') === 'on',
     consent_reglement: fd.get('consent_reglement') === 'on',
-    consent_wa: fd.get('consent_wa') === 'on',
     consent_friends: fd.get('consent_friends') === 'on',
+    avis: collectAvis(form),
     friends: [
       {
         prenom: fd.get('ami1_prenom'),
         nom: fd.get('ami1_nom'),
         telephone: fd.get('ami1_telephone'),
-        email: fd.get('ami1_email'),
       },
       {
         prenom: fd.get('ami2_prenom'),
         nom: fd.get('ami2_nom'),
         telephone: fd.get('ami2_telephone'),
-        email: fd.get('ami2_email'),
       },
     ],
   };

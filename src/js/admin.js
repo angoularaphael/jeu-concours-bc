@@ -40,7 +40,7 @@ async function load(filters = {}) {
     kpiCard('Form. commencés', data.kpis.form_started),
     kpiCard('Form. validés', data.kpis.form_submitted),
     kpiCard('Inscrits', data.kpis.inscrits),
-    kpiCard('Avec email (boost)', data.kpis.with_email),
+    kpiCard('Avec avis Google', data.kpis.with_avis),
     kpiCard('Tickets chances', data.kpis.tickets_total),
     kpiCard('Ami(e)s invité(e)s', data.kpis.amis_invites),
     kpiCard('Ami(e)s finalisé(e)s', data.kpis.amis_finalises),
@@ -68,7 +68,9 @@ async function load(filters = {}) {
       `${c.prenom || ''} ${c.nom || ''}`.trim(),
       c.source || 'direct',
       c.telephone || '',
-      c.email || '—',
+      Array.isArray(c.avis) && c.avis.length
+        ? c.avis.map((a) => a.salle || a).join(', ')
+        : '—',
       c.role || '',
       c.status || '',
       c.wa_status || '',

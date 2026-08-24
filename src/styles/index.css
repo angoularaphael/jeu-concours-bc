@@ -657,7 +657,7 @@ h2 { font-size: clamp(2.1rem, 8vw, 3.6rem); }
 }
 .stepper__pips {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: .4rem;
   margin-top: .65rem;
 }
@@ -867,6 +867,41 @@ input:focus, select:focus {
 }
 .checks a { color: var(--gold-2); }
 .form-error { color: #ff8a8a; font-size: .9rem; }
+
+.avis-intro {
+  margin: 0 0 1rem;
+  color: var(--ink-2);
+  font-size: .92rem;
+  line-height: 1.45;
+}
+.avis-list {
+  display: grid;
+  gap: .85rem;
+}
+.avis-card {
+  padding: .85rem .9rem 1rem;
+  border: 1px solid rgb(212 176 106 / .28);
+  background: rgb(8 12 22 / .55);
+}
+.avis-card__n {
+  display: block;
+  font-family: var(--f-display);
+  letter-spacing: .08em;
+  color: var(--gold);
+  margin-bottom: .45rem;
+}
+.avis-picked {
+  display: grid;
+  gap: .55rem;
+  margin-top: .7rem;
+}
+.avis-picked[hidden] { display: none !important; }
+.avis-name { color: #fff; font-size: 1.05rem; }
+.avis-link { color: var(--gold-2); font-size: .88rem; }
+.avis-ok { margin: 0; color: var(--gold); font-size: .82rem; }
+.avis-file {
+  font-size: .82rem;
+}
 
 .confirm {
   text-align: center;

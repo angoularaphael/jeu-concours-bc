@@ -80,7 +80,7 @@ export default async function handler(req, res) {
       'prenom',
       'nom',
       'telephone',
-      'email',
+      'avis',
       'salle',
       'ville',
       'source',
@@ -101,7 +101,7 @@ export default async function handler(req, res) {
           c.prenom,
           c.nom,
           c.telephone,
-          c.email,
+          Array.isArray(c.avis) ? c.avis.map((a) => a.salle).filter(Boolean).join('|') : '',
           c.salle,
           c.ville,
           c.source,
@@ -133,7 +133,8 @@ export default async function handler(req, res) {
     contacts: contacts.map((c) => ({
       ...c,
       contacts_generes: stats.generated_by[c.id] || 0,
-      chance_boost: Boolean(c.email),
+      chance_boost: Array.isArray(c.avis) && c.avis.length > 0,
+      avis: Array.isArray(c.avis) ? c.avis.map((a) => ({ salle: a.salle })) : [],
     })),
   });
 }
