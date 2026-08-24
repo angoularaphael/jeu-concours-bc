@@ -111,6 +111,15 @@
 </section>
 
 <section class="form-wrap" id="formulaire">
+  <aside class="odds" id="odds" aria-live="polite">
+    <span class="odds__kicker">Tes chances</span>
+    <strong id="odds-label">×1</strong>
+    <div class="odds__pips" id="odds-pips">
+      <i class="is-on"></i><i></i><i></i><i></i>
+    </div>
+    <p class="odds__hint">Chaque email valide = +1 ticket</p>
+    <span class="odds__bump" id="odds-bump" aria-hidden="true">+1</span>
+  </aside>
   <div class="card" data-reveal>
     <div class="card__corner" aria-hidden="true"></div>
     <p class="kicker">Carte d’entrée</p>
@@ -125,17 +134,6 @@
       <div class="stepper__pips" id="step-pips" aria-hidden="true">
         <i class="is-on"></i><i></i><i></i><i></i>
       </div>
-    </div>
-
-    <div class="odds" id="odds" aria-live="polite">
-      <div class="odds__top">
-        <span>Tes chances</span>
-        <strong id="odds-label">×1</strong>
-      </div>
-      <div class="odds__pips" id="odds-pips">
-        <i class="is-on"></i><i></i><i></i><i></i>
-      </div>
-      <p class="odds__hint">Inscription ×1 · chaque email (toi + ami(e)s) ajoute un ticket</p>
     </div>
 
     <form id="form" novalidate>

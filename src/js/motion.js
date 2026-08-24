@@ -190,6 +190,7 @@ export function bindOdds(form) {
   const label = document.getElementById('odds-label');
   const pips = document.querySelectorAll('#odds-pips i');
   const box = document.getElementById('odds');
+  const bump = document.getElementById('odds-bump');
   if (!form || !label || !pips.length) return;
   let last = 1;
   const fields = ['email', 'ami1_email', 'ami2_email'].map((name) => form.elements[name]);
@@ -206,7 +207,15 @@ export function bindOdds(form) {
       label.classList.remove('pop');
       void label.offsetWidth;
       label.classList.add('pop');
-      if (n > last) box.classList.add('ding');
+      if (n > last) {
+        box.classList.add('ding');
+        if (bump) {
+          bump.textContent = `+${n - last}`;
+          bump.classList.remove('is-go');
+          void bump.offsetWidth;
+          bump.classList.add('is-go');
+        }
+      }
       last = n;
       window.setTimeout(() => box.classList.remove('ding'), 700);
     }

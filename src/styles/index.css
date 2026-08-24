@@ -346,7 +346,7 @@ body {
 
 .hero__body {
   margin-top: auto;
-  padding: 2rem 1.25rem 5.5rem;
+  padding: 2rem 6.4rem 5.5rem 1.25rem;
   position: relative;
   z-index: 2;
   max-width: 40rem;
@@ -608,6 +608,7 @@ h2 { font-size: clamp(2.1rem, 8vw, 3.6rem); }
     var(--navy);
   padding-top: 3.5rem;
   padding-bottom: 4rem;
+  padding-right: 6.5rem;
 }
 .form-wrap > .card {
   max-width: var(--max);
@@ -692,29 +693,43 @@ h2 { font-size: clamp(2.1rem, 8vw, 3.6rem); }
 .step-nav .btn-ghost { flex: 0 0 auto; min-width: 7.5rem; }
 
 .odds {
-  margin: 1.1rem 0 1.4rem;
-  padding: .9rem 1rem;
-  background: rgb(232 0 28 / .08);
-  border: 1px solid rgb(232 0 28 / .25);
+  position: fixed;
+  z-index: 24;
+  right: max(.65rem, env(safe-area-inset-right));
+  top: 46%;
+  transform: translateY(-50%);
+  width: 5.6rem;
+  margin: 0;
+  padding: .8rem .5rem .7rem;
+  text-align: center;
+  background: rgb(8 12 22 / .92);
+  border: 1px solid rgb(232 0 28 / .45);
+  box-shadow: 0 12px 40px rgb(0 0 0 / .45), 0 0 24px rgb(232 0 28 / .18);
+  backdrop-filter: blur(12px);
 }
-.odds__top {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  font-size: .78rem;
-  letter-spacing: .16em;
+.odds__kicker {
+  display: block;
+  font-size: .58rem;
+  letter-spacing: .14em;
   text-transform: uppercase;
   color: var(--ink-3);
 }
+.odds__top {
+  display: contents;
+}
+.odds #odds-label,
 .odds__top strong {
+  display: block;
   font-family: var(--f-display);
-  font-size: 1.8rem;
+  font-size: 2rem;
   letter-spacing: .04em;
   color: var(--gold-2);
+  line-height: 1;
+  margin: .25rem 0 .45rem;
   transition: transform .35s var(--ease), color .35s;
 }
-.odds.is-up .odds__top strong { color: var(--rouge-hot); transform: scale(1.08); }
-.odds__top strong.pop { animation: pop .45s var(--ease); }
+.odds.is-up #odds-label { color: var(--rouge-hot); transform: scale(1.08); }
+.odds #odds-label.pop { animation: pop .45s var(--ease); }
 @keyframes pop {
   0% { transform: scale(.7); }
   60% { transform: scale(1.22); }
@@ -722,11 +737,16 @@ h2 { font-size: clamp(2.1rem, 8vw, 3.6rem); }
 }
 .odds.ding { animation: ding .55s var(--ease); }
 @keyframes ding {
-  0% { box-shadow: 0 0 0 0 rgb(212 176 106 / .0); }
-  40% { box-shadow: 0 0 0 8px rgb(212 176 106 / .22); }
-  100% { box-shadow: 0 0 0 0 rgb(212 176 106 / 0); }
+  0% { box-shadow: 0 12px 40px rgb(0 0 0 / .45), 0 0 0 0 rgb(212 176 106 / 0); }
+  40% { box-shadow: 0 12px 40px rgb(0 0 0 / .45), 0 0 0 8px rgb(212 176 106 / .28); }
+  100% { box-shadow: 0 12px 40px rgb(0 0 0 / .45), 0 0 0 0 rgb(212 176 106 / 0); }
 }
-.odds__pips { display: grid; grid-template-columns: repeat(4, 1fr); gap: .4rem; margin: .65rem 0 .45rem; }
+.odds__pips {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: .28rem;
+  margin: 0 0 .45rem;
+}
 .odds__pips i {
   display: block;
   height: 6px;
@@ -738,7 +758,40 @@ h2 { font-size: clamp(2.1rem, 8vw, 3.6rem); }
   background: linear-gradient(90deg, var(--rouge), var(--gold));
   box-shadow: 0 0 12px rgb(232 0 28 / .45);
 }
-.odds__hint { margin: 0; font-size: .72rem; color: var(--ink-3); }
+.odds__hint {
+  margin: 0;
+  font-size: .58rem;
+  line-height: 1.3;
+  color: var(--ink-3);
+}
+.odds__bump {
+  position: absolute;
+  left: 50%;
+  top: 1.6rem;
+  font-family: var(--f-display);
+  font-size: 1.4rem;
+  color: var(--gold-2);
+  opacity: 0;
+  pointer-events: none;
+  text-shadow: 0 0 16px rgb(232 0 28 / .7);
+}
+.odds__bump.is-go { animation: bumpFly .7s var(--ease); }
+@keyframes bumpFly {
+  from { opacity: 1; transform: translate(-50%, 0) scale(.8); }
+  to { opacity: 0; transform: translate(-50%, -28px) scale(1.2); }
+}
+
+@media (min-width: 720px) {
+  .odds {
+    width: 13rem;
+    padding: 1.05rem 1.1rem 1rem;
+    right: max(1.15rem, env(safe-area-inset-right));
+  }
+  .odds__kicker { font-size: .72rem; letter-spacing: .16em; }
+  .odds #odds-label { font-size: 2.6rem; }
+  .odds__pips { grid-template-columns: repeat(4, 1fr); gap: .4rem; }
+  .odds__hint { font-size: .72rem; }
+}
 
 fieldset {
   border: 1px solid var(--line);
@@ -972,8 +1025,9 @@ fieldset:focus-within {
 
 @media (min-width: 720px) {
   .btn { width: auto; }
-  .hero__body { padding-bottom: 6.5rem; }
+  .hero__body { padding: 2rem 1.25rem 6.5rem; padding-right: 15rem; }
   .round-grid { grid-template-columns: repeat(3, 1fr); }
+  .form-wrap { padding-right: 15.5rem; }
   .form-wrap > .card { padding: 2rem; }
 }
 @media (max-width: 520px) {
