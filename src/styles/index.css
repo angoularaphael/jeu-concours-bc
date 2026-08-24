@@ -435,8 +435,17 @@ h2 { font-size: clamp(2.1rem, 8vw, 3.6rem); }
   font-size: clamp(1.7rem, 6vw, 2.4rem);
   color: var(--gold-2);
   line-height: 1;
+  white-space: nowrap;
 }
-.stat span {
+.stat .count {
+  display: inline;
+  margin: 0;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: none;
+  color: inherit;
+}
+.stat > span {
   display: block;
   margin-top: .35rem;
   font-size: .68rem;
