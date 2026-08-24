@@ -35,6 +35,8 @@
 
 <section class="admin" id="dash" hidden>
   <div class="kpis" id="kpis"></div>
+  <p class="admin-tag">Par réseau</p>
+  <div class="kpis" id="sources"></div>
   <form class="filters" id="filters">
     <label>Statut
       <select name="status">
@@ -47,7 +49,16 @@
       </select>
     </label>
     <label>Source
-      <input name="source" placeholder="story, meta, wa…" />
+      <select name="source">
+        <option value="">Toutes</option>
+        <option value="story">Stories (story)</option>
+        <option value="meta">Pub Meta (meta)</option>
+        <option value="video">Vidéo / Reels / TikTok (video)</option>
+        <option value="wa">WhatsApp (wa)</option>
+        <option value="ads">Autres pubs (ads)</option>
+        <option value="qr">QR salle (qr)</option>
+        <option value="direct">Sans tag (direct)</option>
+      </select>
     </label>
     <label>Du
       <input type="date" name="from" />
@@ -64,13 +75,14 @@
         <tr>
           <th>Date</th>
           <th>Nom</th>
+          <th>Source</th>
           <th>Tél</th>
           <th>Email</th>
           <th>Rôle</th>
           <th>Statut</th>
           <th>WhatsApp</th>
-          <th>Source</th>
           <th>Générés</th>
+          <th></th>
         </tr>
       </thead>
       <tbody id="rows"></tbody>

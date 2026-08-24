@@ -973,7 +973,14 @@ input:focus, select:focus {
 .filters { display: flex; flex-wrap: wrap; gap: .75rem; align-items: end; margin-bottom: 1.25rem; }
 .filters label { margin: 0; }
 .filters input, .filters select { min-height: 40px; }
-.table-wrap { overflow-x: auto; }
+.btn-del {
+  width: auto;
+  min-height: 34px;
+  padding: 0 .7rem;
+  font-size: .75rem;
+  color: #ff8a8a;
+  border-color: rgb(232 0 28 / .45);
+}
 table { width: 100%; border-collapse: collapse; font-size: .82rem; }
 th, td { text-align: left; padding: .55rem .4rem; border-bottom: 1px solid var(--line); white-space: nowrap; }
 th { color: var(--ink-3); font-weight: 600; }

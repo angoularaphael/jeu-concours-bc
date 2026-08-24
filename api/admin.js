@@ -2,7 +2,7 @@ import '../lib/load-env.js';
 import { json, queryFromUrl, readBody } from '../lib/http.js';
 import { adminTokenOk, verifyAdminLogin } from '../lib/admin-auth.js';
 import { kpis } from '../lib/contest.js';
-import { listContacts, listEvents, listInvites, listQueueAll } from '../lib/store.js';
+import { deleteContact, listContacts, listEvents, listInvites, listQueueAll } from '../lib/store.js';
 
 function csvEscape(v) {
   const s = v == null ? '' : String(v);
@@ -30,6 +30,21 @@ export default async function handler(req, res) {
       return;
     }
     json(res, 200, { ok: true, token: result.token });
+    return;
+  }
+
+  if (req.method === 'DELETE') {
+    if (!adminTokenOk(req)) {
+      json(res, 401, { ok: false, error: 'unauthorized' });
+      return;
+    }
+    const q = queryFromUrl(req);
+    try {
+      await deleteContact(q.id);
+      json(res, 200, { ok: true });
+    } catch (err) {
+      json(res, 500, { ok: false, error: err.message || 'delete' });
+    }
     return;
   }
 
