@@ -2,12 +2,26 @@ import '../lib/load-env.js';
 import { json, queryFromUrl, readBody } from '../lib/http.js';
 import { adminTokenOk, verifyAdminLogin } from '../lib/admin-auth.js';
 import { kpis } from '../lib/contest.js';
-import { deleteContact, listContacts, listEvents, listInvites, listQueueAll } from '../lib/store.js';
+import { deleteContact, getContactById, listContacts, listEvents, listInvites, listQueueAll } from '../lib/store.js';
 
 function csvEscape(v) {
   const s = v == null ? '' : String(v);
   if (/[",\n;]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
   return s;
+}
+
+function parseDataImage(proof) {
+  const raw = String(proof || '').trim();
+  const m = raw.match(/^data:(image\/(?:jpeg|jpg|png|webp));base64,([A-Za-z0-9+/=\s]+)$/i);
+  if (!m) return null;
+  try {
+    const buffer = Buffer.from(m[2].replace(/\s/g, ''), 'base64');
+    if (!buffer.length) return null;
+    const mime = m[1].toLowerCase() === 'image/jpg' ? 'image/jpeg' : m[1].toLowerCase();
+    return { mime, buffer };
+  } catch {
+    return null;
+  }
 }
 
 export default async function handler(req, res) {
@@ -58,6 +72,31 @@ export default async function handler(req, res) {
   }
 
   const q = queryFromUrl(req);
+
+  if (q.id && q.proof != null && q.proof !== '') {
+    const idx = Number(q.proof);
+    if (!Number.isInteger(idx) || idx < 0 || idx > 2) {
+      json(res, 400, { ok: false, error: 'proof' });
+      return;
+    }
+    try {
+      const contact = await getContactById(q.id);
+      const item = Array.isArray(contact?.avis) ? contact.avis[idx] : null;
+      const parsed = parseDataImage(item?.proof);
+      if (!parsed) {
+        json(res, 404, { ok: false, error: 'proof' });
+        return;
+      }
+      res.statusCode = 200;
+      res.setHeader('Content-Type', parsed.mime);
+      res.setHeader('Cache-Control', 'private, no-store');
+      res.end(parsed.buffer);
+    } catch (err) {
+      json(res, 500, { ok: false, error: err.message || 'proof' });
+    }
+    return;
+  }
+
   const filters = {
     status: q.status || undefined,
     source: q.source || undefined,
@@ -136,7 +175,9 @@ export default async function handler(req, res) {
       ...c,
       contacts_generes: stats.generated_by[c.id] || 0,
       chance_boost: Array.isArray(c.avis) && c.avis.length > 0,
-      avis: Array.isArray(c.avis) ? c.avis.map((a) => ({ salle: a.salle })) : [],
+      avis: Array.isArray(c.avis)
+        ? c.avis.map((a) => ({ salle: a.salle, has_proof: Boolean(a.proof) }))
+        : [],
     })),
   });
 }

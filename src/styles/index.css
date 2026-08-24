@@ -1016,6 +1016,53 @@ input:focus, select:focus {
   color: #ff8a8a;
   border-color: rgb(232 0 28 / .45);
 }
+.btn-proof {
+  width: auto;
+  min-height: 30px;
+  padding: 0 .55rem;
+  font-size: .72rem;
+}
+.avis-proofs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem;
+}
+.proof-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  padding: 1.25rem;
+  background: rgb(5 6 12 / .88);
+}
+.proof-modal[hidden] { display: none; }
+.proof-modal__box {
+  width: min(96vw, 920px);
+  max-height: 92vh;
+  overflow: auto;
+}
+.proof-modal__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .75rem;
+  margin-bottom: .75rem;
+}
+.proof-modal__bar p {
+  margin: 0;
+  color: var(--ink-2);
+  font-size: .9rem;
+}
+.proof-modal img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 80vh;
+  object-fit: contain;
+  background: #0b0d16;
+  border: 1px solid var(--line);
+}
 table { width: 100%; border-collapse: collapse; font-size: .82rem; }
 th, td { text-align: left; padding: .55rem .4rem; border-bottom: 1px solid var(--line); white-space: nowrap; }
 th { color: var(--ink-3); font-weight: 600; }

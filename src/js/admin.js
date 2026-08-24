@@ -9,6 +9,9 @@ const loginError = document.getElementById('login-error');
 const exportLink = document.getElementById('export');
 
 let lastFilters = {};
+const proofModal = document.getElementById('proof-modal');
+const proofImg = document.getElementById('proof-img');
+const proofCaption = document.getElementById('proof-caption');
 
 function token() {
   return sessionStorage.getItem(KEY) || '';
@@ -69,15 +72,14 @@ async function load(filters = {}) {
       c.source || 'direct',
       c.telephone || '',
       c.email || '',
-      Array.isArray(c.avis) && c.avis.length
-        ? c.avis.map((a) => a.salle || a).join(', ')
-        : '—',
-      c.role || '',
-      c.status || '',
-      c.wa_status || '',
-      String(c.contacts_generes || 0),
     ];
     for (const v of cells) {
+      const td = document.createElement('td');
+      td.textContent = v;
+      tr.appendChild(td);
+    }
+    tr.appendChild(avisCell(c));
+    for (const v of [c.role || '', c.status || '', c.wa_status || '', String(c.contacts_generes || 0)]) {
       const td = document.createElement('td');
       td.textContent = v;
       tr.appendChild(td);
@@ -94,6 +96,57 @@ async function load(filters = {}) {
   }
   exportLink.href = `/api/admin?token=${encodeURIComponent(token())}&export=csv`;
 }
+
+function avisCell(c) {
+  const td = document.createElement('td');
+  const avis = Array.isArray(c.avis) ? c.avis : [];
+  if (!avis.length) {
+    td.textContent = '—';
+    return td;
+  }
+  const wrap = document.createElement('div');
+  wrap.className = 'avis-proofs';
+  avis.forEach((a, i) => {
+    const salle = a.salle || `avis ${i + 1}`;
+    if (!a.has_proof) {
+      const span = document.createElement('span');
+      span.textContent = salle;
+      wrap.appendChild(span);
+      return;
+    }
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'btn btn-ghost btn-proof';
+    btn.textContent = `Voir ${salle}`;
+    btn.addEventListener('click', () => openProof(c, i));
+    wrap.appendChild(btn);
+  });
+  td.appendChild(wrap);
+  return td;
+}
+
+function openProof(c, i) {
+  if (!proofModal || !proofImg) return;
+  const salle = c.avis?.[i]?.salle || '';
+  proofCaption.textContent = `${c.prenom || ''} ${c.nom || ''} — ${salle}`.trim();
+  proofImg.src = `/api/admin?token=${encodeURIComponent(token())}&id=${encodeURIComponent(c.id)}&proof=${i}`;
+  proofImg.alt = `Screen avis Google ${salle}`.trim();
+  proofModal.hidden = false;
+}
+
+function closeProof() {
+  if (!proofModal || !proofImg) return;
+  proofModal.hidden = true;
+  proofImg.removeAttribute('src');
+}
+
+document.getElementById('proof-close')?.addEventListener('click', closeProof);
+proofModal?.addEventListener('click', (e) => {
+  if (e.target === proofModal) closeProof();
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && proofModal && !proofModal.hidden) closeProof();
+});
 
 async function remove(id, label) {
   if (!id || !window.confirm(`Supprimer ${label || 'ce contact'} ?`)) return;

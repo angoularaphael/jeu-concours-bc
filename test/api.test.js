@@ -73,3 +73,61 @@ describe('POST /api/inscrire', () => {
     assert.equal(res.body.friends.length, 2);
   });
 });
+
+describe('GET /api/admin screen avis', () => {
+  before(() => {
+    process.env.LEADS_BACKEND = 'memory';
+    process.env.ADMIN_TOKEN = 'tok-test';
+    resetMemoryStore();
+  });
+  after(() => resetMemoryStore());
+
+  it('sert la photo d’avis depuis le backoffice', async () => {
+    const proof =
+      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';
+    const created = mockRes();
+    await handleInscrire(
+      mockReq({
+        ...valid,
+        telephone: '0610101010',
+        friends: [
+          { prenom: 'Leo', nom: 'Martin', telephone: '0610101011' },
+          { prenom: 'Nina', nom: 'Bernard', telephone: '0610101012' },
+        ],
+        avis: [{ salle: 'minimes', proof }],
+      }),
+      created
+    );
+    assert.equal(created.statusCode, 200, JSON.stringify(created.body));
+
+    const { getContactByPhoneKey } = await import('../lib/store.js');
+    const contact = await getContactByPhoneKey('610101010');
+    assert.ok(contact?.id);
+
+    const { default: handleAdmin } = await import('../api/admin.js');
+    const res = {
+      statusCode: 0,
+      headers: {},
+      body: null,
+      headersSent: false,
+      setHeader(k, v) {
+        this.headers[k] = v;
+      },
+      end(raw) {
+        this.headersSent = true;
+        this.body = raw;
+      },
+    };
+    await handleAdmin(
+      {
+        method: 'GET',
+        url: `/api/admin?token=tok-test&id=${contact.id}&proof=0`,
+        headers: { host: 'localhost' },
+      },
+      res
+    );
+    assert.equal(res.statusCode, 200);
+    assert.equal(res.headers['Content-Type'], 'image/png');
+    assert.ok(Buffer.isBuffer(res.body) || res.body?.length > 0);
+  });
+});
