@@ -29,6 +29,7 @@ export default async function handler(req, res) {
       prenom: contact.prenom,
       nom: contact.nom,
       telephone: contact.telephone,
+      email: contact.email || '',
       status: contact.status,
       already_registered: contact.status === 'inscrit' || contact.status === 'inscription_finalisee',
     },

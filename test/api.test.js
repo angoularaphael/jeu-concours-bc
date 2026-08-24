@@ -39,6 +39,7 @@ const valid = {
   prenom: 'Camille',
   nom: 'Durand',
   telephone: '0677777777',
+  email: 'camille.durand@example.com',
   consent_age: true,
   consent_reglement: true,
   consent_friends: true,

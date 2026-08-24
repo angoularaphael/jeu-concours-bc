@@ -94,7 +94,7 @@
     <li class="round" data-reveal>
       <span class="round__n">01</span>
       <h3>Inscris-toi</h3>
-      <p>Nom, prénom, téléphone. 10 secondes. Tu es déjà dans le tirage.</p>
+      <p>Nom, prénom, téléphone, email. 10 secondes. Tu es déjà dans le tirage.</p>
     </li>
     <li class="round" data-reveal>
       <span class="round__n">02</span>
@@ -140,7 +140,7 @@
       <input type="hidden" name="invite_token" id="invite_token" />
       <input type="hidden" name="source" id="source" />
 
-      <fieldset class="step is-on" data-step="0" data-title="Toi" data-lead="Nom, prénom, téléphone. Ensuite tes 2 ami(e)s, puis tes avis Google.">
+      <fieldset class="step is-on" data-step="0" data-title="Toi" data-lead="Nom, prénom, téléphone, email. Ensuite tes 2 ami(e)s, puis tes avis Google.">
         <legend>Toi</legend>
         <div class="grid">
           <label>Prénom *
@@ -152,6 +152,9 @@
         </div>
         <label>Téléphone *
           <input name="telephone" id="telephone" type="tel" inputmode="tel" autocomplete="tel" required placeholder="06 12 34 56 78" />
+        </label>
+        <label>Email *
+          <input name="email" id="email" type="email" autocomplete="email" required maxlength="120" placeholder="toi@email.fr" />
         </label>
         <details class="optional">
           <summary>Salle et ville</summary>

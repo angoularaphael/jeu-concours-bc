@@ -12,6 +12,7 @@ test('inscription complète', async ({ page }) => {
   await page.locator('#prenom').fill('Camille');
   await page.locator('#nom').fill('Durand');
   await page.locator('#telephone').fill('0611111111');
+  await page.locator('#email').fill('camille.durand@example.com');
   await page.getByRole('button', { name: /Continuer/i }).click();
   await page.locator('[name="ami1_prenom"]').fill('Leo');
   await page.locator('[name="ami1_nom"]').fill('Martin');

@@ -68,6 +68,7 @@ async function load(filters = {}) {
       `${c.prenom || ''} ${c.nom || ''}`.trim(),
       c.source || 'direct',
       c.telephone || '',
+      c.email || '',
       Array.isArray(c.avis) && c.avis.length
         ? c.avis.map((a) => a.salle || a).join(', ')
         : '—',

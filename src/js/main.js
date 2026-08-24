@@ -36,6 +36,7 @@ async function loadInvite() {
     `${data.invite.prenom || 'Tu'} as été invité(e). Vérifie tes infos, puis désigne 2 ami(e)s.`;
   document.getElementById('prenom').value = data.invite.prenom || '';
   document.getElementById('nom').value = data.invite.nom || '';
+  document.getElementById('email').value = data.invite.email || '';
   const tel = document.getElementById('telephone');
   tel.value = data.invite.telephone || '';
   tel.readOnly = true;
@@ -138,6 +139,7 @@ form.addEventListener('submit', async (e) => {
     prenom: fd.get('prenom'),
     nom: fd.get('nom'),
     telephone: fd.get('telephone'),
+    email: fd.get('email'),
     salle: fd.get('salle'),
     ville: fd.get('ville'),
     source: fd.get('source') || readSource(),

@@ -12,6 +12,7 @@ const valid = {
   prenom: 'Camille',
   nom: 'Durand',
   telephone: '0611111111',
+  email: 'camille.durand@example.com',
   consent_age: true,
   consent_reglement: true,
   consent_friends: true,
@@ -74,6 +75,14 @@ describe('parseEntry', () => {
     });
     assert.equal(parsed.ok, false);
   });
+
+  it('refuse un email manquant ou invalide', () => {
+    assert.equal(parseEntry({ ...valid, email: '' }).ok, false);
+    assert.equal(parseEntry({ ...valid, email: 'pas-un-email' }).ok, false);
+    const ok = parseEntry({ ...valid, email: '  Camille.Durand@Example.COM ' });
+    assert.equal(ok.ok, true);
+    assert.equal(ok.data.email, 'camille.durand@example.com');
+  });
 });
 
 describe('enterContest', () => {
@@ -95,6 +104,8 @@ describe('enterContest', () => {
     assert.equal(result.friends[1].status, 'invite');
     const all = await listContacts();
     assert.equal(all.length, 3);
+    const camille = await getContactByPhoneKey('611111111');
+    assert.equal(camille.email, 'camille.durand@example.com');
   });
 
   it('détecte un doublon participant', async () => {
@@ -138,6 +149,7 @@ describe('enterContest', () => {
         prenom: 'Leo',
         nom: 'Martin',
         telephone: '0622222222',
+        email: 'leo.martin@example.com',
         invite_token: ami.invite_token,
         consent_age: true,
         consent_reglement: true,
