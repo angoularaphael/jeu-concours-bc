@@ -78,7 +78,7 @@ async function load(filters = {}) {
       td.textContent = v;
       tr.appendChild(td);
     }
-    tr.appendChild(avisCell(c));
+    tr.appendChild(photoCell(c));
     for (const v of [c.role || '', c.status || '', c.wa_status || '', String(c.contacts_generes || 0)]) {
       const td = document.createElement('td');
       td.textContent = v;
@@ -97,27 +97,29 @@ async function load(filters = {}) {
   exportLink.href = `/api/admin?token=${encodeURIComponent(token())}&export=csv`;
 }
 
-function avisCell(c) {
+function photoCell(c) {
   const td = document.createElement('td');
-  const avis = Array.isArray(c.avis) ? c.avis : [];
+  td.className = 'photo-cell';
+  const avis = Array.isArray(c.avis) ? c.avis.filter((a) => a.has_proof) : [];
   if (!avis.length) {
-    td.textContent = '—';
+    const empty = document.createElement('span');
+    empty.className = 'photo-empty';
+    empty.textContent = 'Aucune';
+    td.appendChild(empty);
     return td;
   }
   const wrap = document.createElement('div');
-  wrap.className = 'avis-proofs';
-  avis.forEach((a, i) => {
-    const salle = a.salle || `avis ${i + 1}`;
-    if (!a.has_proof) {
-      const span = document.createElement('span');
-      span.textContent = salle;
-      wrap.appendChild(span);
-      return;
-    }
+  wrap.className = 'photo-thumbs';
+  avis.forEach((a) => {
+    const i = c.avis.indexOf(a);
     const btn = document.createElement('button');
     btn.type = 'button';
-    btn.className = 'btn btn-ghost btn-proof';
-    btn.textContent = `Voir ${salle}`;
+    btn.className = 'photo-thumb';
+    btn.title = `Voir ${a.salle || 'la photo'}`;
+    const img = document.createElement('img');
+    img.src = `/api/admin?token=${encodeURIComponent(token())}&id=${encodeURIComponent(c.id)}&proof=${i}`;
+    img.alt = a.salle || 'Photo';
+    btn.appendChild(img);
     btn.addEventListener('click', () => openProof(c, i));
     wrap.appendChild(btn);
   });
