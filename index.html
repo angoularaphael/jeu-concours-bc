@@ -115,7 +115,17 @@
     <div class="card__corner" aria-hidden="true"></div>
     <p class="kicker">Carte d’entrée</p>
     <h2 id="form-title">Je m'inscris</h2>
-    <p class="form-lead" id="form-lead">Tes infos, puis 2 ami(e)s. Ils recevront un WhatsApp pour finaliser.</p>
+    <p class="form-lead" id="form-lead">Tes infos d’abord. Ensuite tes 2 ami(e)s, un par un.</p>
+
+    <div class="stepper" id="stepper" aria-label="Progression">
+      <div class="stepper__top">
+        <span id="step-label">Round 1 / 4</span>
+        <strong id="step-name">Toi</strong>
+      </div>
+      <div class="stepper__pips" id="step-pips" aria-hidden="true">
+        <i class="is-on"></i><i></i><i></i><i></i>
+      </div>
+    </div>
 
     <div class="odds" id="odds" aria-live="polite">
       <div class="odds__top">
@@ -132,7 +142,7 @@
       <input type="hidden" name="invite_token" id="invite_token" />
       <input type="hidden" name="source" id="source" />
 
-      <fieldset>
+      <fieldset class="step is-on" data-step="0" data-title="Toi" data-lead="Nom, prénom, téléphone. L’email booste tes chances.">
         <legend>Toi</legend>
         <div class="grid">
           <label>Prénom *
@@ -166,7 +176,7 @@
         </details>
       </fieldset>
 
-      <fieldset>
+      <fieldset class="step" data-step="1" data-title="Ami(e) 1" data-lead="Il ou elle reçoit un WhatsApp pour finaliser. Email optionnel = +1 ticket pour toi." hidden>
         <legend>Ami(e) 1</legend>
         <div class="grid">
           <label>Prénom *
@@ -184,7 +194,7 @@
         </label>
       </fieldset>
 
-      <fieldset>
+      <fieldset class="step" data-step="2" data-title="Ami(e) 2" data-lead="Le deuxième ami(e). Même règle : email optionnel = encore +1 ticket." hidden>
         <legend>Ami(e) 2</legend>
         <div class="grid">
           <label>Prénom *
@@ -202,8 +212,8 @@
         </label>
       </fieldset>
 
-      <fieldset class="checks">
-        <legend class="sr">Consentements</legend>
+      <fieldset class="checks step" data-step="3" data-title="Validation" data-lead="Dernier round. Coche les cases, puis tu es dans le tirage." hidden>
+        <legend>Consentements</legend>
         <label class="check"><input type="checkbox" name="consent_age" required /> J'ai 18 ans (ou l'accord d'un responsable légal).</label>
         <label class="check"><input type="checkbox" name="consent_reglement" required /> J'accepte le <a href="/reglement.html" target="_blank" rel="noopener">règlement du jeu</a>.</label>
         <label class="check"><input type="checkbox" name="consent_wa" required /> J'accepte d'être contacté(e) par WhatsApp par Boxing Center.</label>
@@ -211,7 +221,11 @@
       </fieldset>
 
       <p class="form-error" id="form-error" hidden></p>
-      <button class="btn btn-pulse" type="submit" id="submit">Valider ma participation</button>
+      <div class="step-nav">
+        <button type="button" class="btn btn-ghost" id="step-back" hidden>Retour</button>
+        <button type="button" class="btn btn-pulse" id="step-next">Continuer</button>
+        <button class="btn btn-pulse" type="submit" id="submit" hidden>Valider ma participation</button>
+      </div>
     </form>
   </div>
 </section>

@@ -14,6 +14,7 @@ document.getElementById('invite_token').value = readInviteToken();
 track('page_vue');
 bootMotion();
 bindOdds(form);
+bindSteps(form);
 
 let started = false;
 form.addEventListener('focusin', () => {
@@ -46,6 +47,80 @@ async function loadInvite() {
 }
 
 loadInvite().catch(() => {});
+
+function bindSteps(root) {
+  const steps = [...root.querySelectorAll('[data-step]')];
+  const nextBtn = document.getElementById('step-next');
+  const backBtn = document.getElementById('step-back');
+  const submit = document.getElementById('submit');
+  const label = document.getElementById('step-label');
+  const nameEl = document.getElementById('step-name');
+  const lead = document.getElementById('form-lead');
+  const pips = document.querySelectorAll('#step-pips i');
+  if (!steps.length || !nextBtn || !submit) return;
+
+  let i = 0;
+  const titles = steps.map((s) => s.dataset.title || '');
+  const leads = steps.map((s) => s.dataset.lead || '');
+
+  const show = (n, dir = 1, { focus = true } = {}) => {
+    i = Math.max(0, Math.min(steps.length - 1, n));
+    const last = i === steps.length - 1;
+    steps.forEach((s, idx) => {
+      const on = idx === i;
+      s.hidden = !on;
+      s.classList.toggle('is-on', on);
+      if (on && focus) {
+        s.classList.remove('step-in-left', 'step-in-right');
+        void s.offsetWidth;
+        s.classList.add(dir >= 0 ? 'step-in-right' : 'step-in-left');
+      }
+    });
+    backBtn.hidden = i === 0;
+    nextBtn.hidden = last;
+    submit.hidden = !last;
+    if (label) label.textContent = `Round ${i + 1} / ${steps.length}`;
+    if (nameEl) nameEl.textContent = titles[i];
+    if (lead && leads[i]) lead.textContent = leads[i];
+    pips.forEach((pip, idx) => {
+      pip.classList.toggle('is-on', idx <= i);
+      pip.classList.toggle('is-done', idx < i);
+    });
+    if (focus) {
+      const first = steps[i].querySelector('input:not([type="hidden"]), select');
+      if (first) first.focus({ preventScroll: true });
+    }
+  };
+
+  const validStep = () => {
+    const fields = steps[i].querySelectorAll('input, select, textarea');
+    for (const f of fields) {
+      if (!f.checkValidity()) {
+        f.reportValidity();
+        return false;
+      }
+    }
+    return true;
+  };
+
+  nextBtn.addEventListener('click', () => {
+    if (!validStep()) return;
+    show(i + 1, 1);
+    root.closest('.card')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+  backBtn.addEventListener('click', () => {
+    show(i - 1, -1);
+  });
+  root.addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter') return;
+    if (e.target.closest('textarea, a, button')) return;
+    if (i < steps.length - 1) {
+      e.preventDefault();
+      nextBtn.click();
+    }
+  });
+  show(0, 1, { focus: false });
+}
 
 function showError(msg) {
   errorEl.hidden = false;
