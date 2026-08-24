@@ -140,8 +140,6 @@ form.addEventListener('submit', async (e) => {
     nom: fd.get('nom'),
     telephone: fd.get('telephone'),
     email: fd.get('email'),
-    salle: fd.get('salle'),
-    ville: fd.get('ville'),
     source: fd.get('source') || readSource(),
     invite_token: fd.get('invite_token') || readInviteToken(),
     consent_age: fd.get('consent_age') === 'on',

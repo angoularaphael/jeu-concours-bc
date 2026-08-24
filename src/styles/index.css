@@ -825,8 +825,6 @@ input:focus, select:focus {
   box-shadow: 0 0 0 3px rgb(212 176 106 / .18);
 }
 .grid { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
-.optional { margin: .4rem 0 0; color: var(--ink-3); }
-.optional summary { cursor: pointer; margin-bottom: .75rem; }
 .opt { font-weight: 700; color: var(--gold); font-size: .72rem; letter-spacing: .04em; text-transform: uppercase; }
 .checks label.check {
   display: flex;
