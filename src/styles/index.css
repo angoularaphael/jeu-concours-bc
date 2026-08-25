@@ -909,11 +909,6 @@ input:focus, select:focus {
   gap: .35rem;
   flex-wrap: wrap;
 }
-.avis-hint {
-  margin: -.35rem 0 .85rem;
-  color: var(--ink-3);
-  font-size: .82rem;
-}
 .avis-list {
   display: grid;
   gap: .85rem;
