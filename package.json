@@ -14,7 +14,8 @@
     "build": "vite build",
     "preview": "vite preview --port 5620",
     "test": "node --test test/phone.test.js test/contest.test.js test/api.test.js",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "db:avis": "node scripts/ensure-avis-column.mjs"
   },
   "devDependencies": {
     "@playwright/test": "^1.55.0",

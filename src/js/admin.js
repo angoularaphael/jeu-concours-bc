@@ -104,7 +104,12 @@ function photoCell(c) {
   if (!avis.length) {
     const empty = document.createElement('span');
     empty.className = 'photo-empty';
-    empty.textContent = 'Aucune';
+    if (Number(c.tickets) >= 2) {
+      empty.textContent = 'Preuve perdue';
+      empty.title = '2 tickets mais image non stockée (migration base requise)';
+    } else {
+      empty.textContent = 'Aucune';
+    }
     td.appendChild(empty);
     return td;
   }

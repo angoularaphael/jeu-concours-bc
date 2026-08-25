@@ -1013,6 +1013,30 @@ input:focus, select:focus {
 .legal li { margin-bottom: .35rem; }
 .legal strong { color: #fff; }
 .admin { color: var(--ink); max-width: var(--max); margin: 0 auto; padding: 2rem 1.25rem; }
+.admin-body .admin { max-width: min(96vw, 72rem); }
+.admin-body #login.admin { max-width: min(96vw, 28rem); }
+.admin-body .table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 0 -1.25rem;
+  padding: 0 1.25rem 0.25rem;
+}
+.admin-body table { min-width: 52rem; }
+.admin-body th,
+.admin-body td { white-space: nowrap; }
+.admin-body td:nth-child(2),
+.admin-body td:nth-child(5),
+.admin-body th:nth-child(2),
+.admin-body th:nth-child(5) {
+  white-space: normal;
+  max-width: 11rem;
+}
+.admin-body .photo-cell { min-width: 4.5rem; }
+.admin-body .photo-empty[title] {
+  color: #ffb86a;
+  cursor: help;
+  text-decoration: underline dotted;
+}
 .foot a, .legal a { color: var(--ink); }
 .muted { opacity: .75; }
 
@@ -1123,7 +1147,7 @@ input:focus, select:focus {
   border: 1px solid var(--line);
 }
 table { width: 100%; border-collapse: collapse; font-size: .82rem; }
-th, td { text-align: left; padding: .55rem .4rem; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th, td { text-align: left; padding: .55rem .4rem; border-bottom: 1px solid var(--line); }
 th { color: var(--ink-3); font-weight: 600; }
 .login-alt { text-align: center; margin: .35rem 0 .75rem; letter-spacing: .08em; text-transform: uppercase; font-size: .72rem; }
 
