@@ -27,5 +27,5 @@ test('inscription complète', async ({ page }) => {
   await page.locator('[name="consent_reglement"]').check();
   await page.locator('[name="consent_friends"]').check();
   await page.getByRole('button', { name: /Valider ma participation/i }).click();
-  await expect(page.getByRole('heading', { name: /participation est enregistrée/i })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /f[ée]licitations, tu es dans le tirage/i })).toBeVisible();
 });

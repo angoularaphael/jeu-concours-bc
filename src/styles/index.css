@@ -453,6 +453,28 @@ h2 { font-size: clamp(2.1rem, 8vw, 3.6rem); }
   text-transform: uppercase;
   color: var(--ink-3);
 }
+.stat--nights {
+  padding-left: .55rem;
+  padding-right: .55rem;
+}
+.stat--nights > span {
+  margin-top: .3rem;
+}
+.stat--nights > small {
+  display: block;
+  margin-top: .28rem;
+  font-size: .58rem;
+  font-weight: 700;
+  letter-spacing: .03em;
+  line-height: 1.3;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  white-space: normal;
+}
+.stat--nights sup {
+  font-size: .65em;
+  line-height: 0;
+}
 
 .btn {
   display: inline-flex;
@@ -1201,6 +1223,10 @@ fieldset:focus-within {
   .round-grid { grid-template-columns: repeat(3, 1fr); }
   .form-wrap { padding-right: 15.5rem; }
   .form-wrap > .card { padding: 2rem; }
+}
+@media (max-width: 720px) {
+  .stats { grid-template-columns: 1fr 1fr; }
+  .stat--nights { grid-column: 1 / -1; }
 }
 @media (max-width: 520px) {
   .hero__stamp { top: 15%; right: .55rem; scale: .82; }
