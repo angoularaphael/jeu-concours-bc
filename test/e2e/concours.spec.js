@@ -22,7 +22,7 @@ test('inscription complète', async ({ page }) => {
   await page.locator('[name="ami2_nom"]').fill('Bernard');
   await page.locator('[name="ami2_telephone"]').fill('0633333333');
   await page.getByRole('button', { name: /Continuer/i }).click();
-  await page.getByRole('button', { name: /Continuer sans avis google/i }).click();
+  await page.getByRole('button', { name: /Continuer sans avis/i }).click();
   await page.locator('[name="consent_age"]').check();
   await page.locator('[name="consent_reglement"]').check();
   await page.locator('[name="consent_friends"]').check();
