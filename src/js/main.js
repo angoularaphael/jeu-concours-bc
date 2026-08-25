@@ -59,6 +59,9 @@ function bindSteps(root) {
   const nameEl = document.getElementById('step-name');
   const lead = document.getElementById('form-lead');
   const pips = document.querySelectorAll('#step-pips i');
+  const avisActions = document.getElementById('avis-actions');
+  const avisSkip = document.getElementById('avis-skip');
+  const avisOk = document.getElementById('avis-ok');
   if (!steps.length || !nextBtn || !submit) return;
 
   let i = 0;
@@ -79,7 +82,9 @@ function bindSteps(root) {
       }
     });
     backBtn.hidden = i === 0;
-    nextBtn.hidden = last;
+    const avisStep = steps[i]?.id === 'step-avis';
+    nextBtn.hidden = last || avisStep;
+    if (avisActions) avisActions.hidden = !avisStep;
     submit.hidden = !last;
     if (label) label.textContent = `Round ${i + 1} / ${steps.length}`;
     if (nameEl) nameEl.textContent = titles[i];
@@ -105,21 +110,51 @@ function bindSteps(root) {
     return true;
   };
 
-  nextBtn.addEventListener('click', () => {
-    if (!validStep()) return;
+  const goNext = () => {
     show(i + 1, 1);
     root.closest('.card')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  nextBtn.addEventListener('click', () => {
+    if (!validStep()) return;
+    goNext();
   });
   backBtn.addEventListener('click', () => {
     show(i - 1, -1);
   });
+  avisSkip?.addEventListener('click', () => {
+    const salle = root.elements.avis_salle_0;
+    const proof = root.elements.avis_proof_0;
+    if (salle) salle.value = '';
+    if (proof) proof.value = '';
+    const file = root.querySelector('.avis-file');
+    if (file) file.value = '';
+    const ok = root.querySelector('.avis-ok');
+    if (ok) ok.hidden = true;
+    const picked = root.querySelector('.avis-picked');
+    if (picked) picked.hidden = true;
+    const draw = root.querySelector('.avis-draw');
+    if (draw) draw.textContent = 'Ouvrir la fiche Google';
+    root.dispatchEvent(new Event('odds-refresh'));
+    goNext();
+  });
+  avisOk?.addEventListener('click', () => {
+    const proof = String(root.elements.avis_proof_0?.value || '');
+    if (!proof.startsWith('data:image/')) {
+      const file = root.querySelector('.avis-file');
+      if (file) file.reportValidity?.();
+      window.alert('Ajoute le screen de ton avis Google pour valider le 2e ticket.');
+      return;
+    }
+    goNext();
+  });
   root.addEventListener('keydown', (e) => {
     if (e.key !== 'Enter') return;
     if (e.target.closest('textarea, a, button')) return;
-    if (i < steps.length - 1) {
-      e.preventDefault();
-      nextBtn.click();
-    }
+    if (i >= steps.length - 1) return;
+    e.preventDefault();
+    if (steps[i]?.id === 'step-avis') return;
+    nextBtn.click();
   });
   show(0, 1, { focus: false });
 }

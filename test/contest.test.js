@@ -41,7 +41,7 @@ describe('parseEntry', () => {
     assert.equal(parsed.ok, false);
   });
 
-  it('accepte une inscription sans avis et compte +1 ticket par avis', () => {
+  it('accepte une inscription sans avis et un seul avis Google', () => {
     const sans = parseEntry(valid);
     assert.equal(sans.ok, true);
     assert.equal(sans.data.avis.length, 0);
@@ -54,17 +54,18 @@ describe('parseEntry', () => {
       ],
     });
     assert.equal(withAvis.ok, true, JSON.stringify(withAvis.errors));
-    assert.equal(withAvis.data.avis.length, 2);
+    assert.equal(withAvis.data.avis.length, 1);
   });
 
-  it('compte un ticket par avis Google (max x4)', async () => {
+  it('compte 1 ticket sans avis, 2 tickets avec un avis Google', async () => {
     const { ticketCount } = await import('../lib/contest.js');
     assert.equal(ticketCount({ avis: [] }), 1);
+    assert.equal(ticketCount({ avis: [{ salle: 'minimes' }] }), 2);
     assert.equal(
       ticketCount({
         avis: [{ salle: 'minimes' }, { salle: 'portet' }, { salle: 'st-cyprien' }],
       }),
-      4
+      2
     );
   });
 

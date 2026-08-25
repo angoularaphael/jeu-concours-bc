@@ -194,9 +194,8 @@ export function bindOdds(form) {
 
   const update = () => {
     let n = 1;
-    for (const el of form.querySelectorAll('[name^="avis_proof_"]')) {
-      if (String(el.value || '').startsWith('data:image/')) n += 1;
-    }
+    const proof = form.querySelector('[name="avis_proof_0"]');
+    if (proof && String(proof.value || '').startsWith('data:image/')) n = 2;
     label.textContent = `×${n}`;
     pips.forEach((pip, i) => pip.classList.toggle('is-on', i < n));
     box.classList.toggle('is-up', n > 1);

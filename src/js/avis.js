@@ -49,7 +49,7 @@ export function bindAvis(form) {
       link.href = salle.maps;
       picked.hidden = false;
       ok.hidden = true;
-      draw.textContent = 'Tirer une autre salle';
+      draw.textContent = 'Ouvrir une autre fiche';
       form.dispatchEvent(new Event('odds-refresh'));
       window.open(salle.maps, '_blank', 'noopener');
     });
@@ -63,6 +63,15 @@ export function bindAvis(form) {
         return;
       }
       try {
+        if (!salleInput.value) {
+          const salle = pickSalle(usedSalles(form));
+          if (salle) {
+            salleInput.value = salle.id;
+            nameEl.textContent = `Boxing Center ${salle.label}`;
+            link.href = salle.maps;
+            picked.hidden = false;
+          }
+        }
         proofInput.value = await fileToProof(blob);
         ok.hidden = false;
       } catch {
@@ -76,7 +85,7 @@ export function bindAvis(form) {
 }
 
 export function collectAvis(form) {
-  return [0, 1, 2]
+  return [0]
     .map((i) => ({
       salle: form.elements[`avis_salle_${i}`]?.value || '',
       proof: form.elements[`avis_proof_${i}`]?.value || '',

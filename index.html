@@ -81,8 +81,8 @@
 
   <div class="ticker" aria-hidden="true">
     <div class="ticker__track">
-      <span>10 abonnements ◆ 400 € ◆ 1 gagnant / soir ◆ 10 jours ◆ invite 2 ami(e)s ◆ 3 avis Google = plus de chances ◆ </span>
-      <span>10 abonnements ◆ 400 € ◆ 1 gagnant / soir ◆ 10 jours ◆ invite 2 ami(e)s ◆ 3 avis Google = plus de chances ◆ </span>
+      <span>10 abonnements ◆ 400 € ◆ 1 gagnant / soir ◆ 10 jours ◆ invite 2 ami(e)s ◆ 1 avis Google = +1 ticket ◆ </span>
+      <span>10 abonnements ◆ 400 € ◆ 1 gagnant / soir ◆ 10 jours ◆ invite 2 ami(e)s ◆ 1 avis Google = +1 ticket ◆ </span>
     </div>
   </div>
 </section>
@@ -94,17 +94,17 @@
     <li class="round" data-reveal>
       <span class="round__n">01</span>
       <h3>Inscris-toi</h3>
-      <p>Nom, prénom, téléphone, email. 10 secondes. Tu es déjà dans le tirage.</p>
+      <p>Nom, prénom, téléphone, email. 10 secondes.</p>
     </li>
     <li class="round" data-reveal>
       <span class="round__n">02</span>
       <h3>Invite 2 ami(e)s</h3>
-      <p>Ils reçoivent un WhatsApp. Ils peuvent gagner aussi.</p>
+      <p>Mentionne le nom, prénom et tel de tes amis, <strong>ça y est tu es dans le tirage</strong>.</p>
     </li>
     <li class="round" data-reveal>
       <span class="round__n">03</span>
       <h3>Boost tes chances</h3>
-      <p>3 avis Google. Tu tires une salle au hasard, tu laisses l’avis, tu envoies le screen. Chaque avis = +1 ticket. Jusqu’à x4.</p>
+      <p>1 avis Google. Laisse un avis Google sur BC, envoie le screen. L’avis te rapporte un ticket supplémentaire.</p>
     </li>
   </ol>
   <p class="promise" data-reveal>Tirage chaque soir pendant 10 jours, dès le <strong>1er septembre 2026</strong>.</p>
@@ -115,16 +115,16 @@
     <span class="odds__kicker">Tes chances</span>
     <strong id="odds-label">×1</strong>
     <div class="odds__pips" id="odds-pips">
-      <i class="is-on"></i><i></i><i></i><i></i>
+      <i class="is-on"></i><i></i>
     </div>
-    <p class="odds__hint">Chaque avis Google (avec screen) = +1 ticket</p>
+    <p class="odds__hint">Laisse un avis Google et gagne un ticket supplémentaire</p>
     <span class="odds__bump" id="odds-bump" aria-hidden="true">+1</span>
   </aside>
   <div class="card" data-reveal>
     <div class="card__corner" aria-hidden="true"></div>
     <p class="kicker">Carte d’entrée</p>
     <h2 id="form-title">Je m'inscris</h2>
-    <p class="form-lead" id="form-lead">Tes infos d’abord. Ensuite tes 2 ami(e)s, puis tes avis Google.</p>
+    <p class="form-lead" id="form-lead">Tes infos d’abord. Ensuite tes 2 ami(e)s : nom, prénom, téléphone.</p>
 
     <div class="stepper" id="stepper" aria-label="Progression">
       <div class="stepper__top">
@@ -140,7 +140,7 @@
       <input type="hidden" name="invite_token" id="invite_token" />
       <input type="hidden" name="source" id="source" />
 
-      <fieldset class="step is-on" data-step="0" data-title="Toi" data-lead="Nom, prénom, téléphone, email. Ensuite tes 2 ami(e)s, puis tes avis Google.">
+      <fieldset class="step is-on" data-step="0" data-title="Toi" data-lead="Nom, prénom, téléphone, email. Ensuite tes 2 ami(e)s.">
         <legend>Toi</legend>
         <div class="grid">
           <label>Prénom *
@@ -158,7 +158,7 @@
         </label>
       </fieldset>
 
-      <fieldset class="step" data-step="1" data-title="Ami(e) 1" data-lead="Il ou elle reçoit un WhatsApp pour finaliser." hidden>
+      <fieldset class="step" data-step="1" data-title="Ami(e) 1" data-lead="Mentionne le nom, prénom et tel de tes amis, ça y est tu es dans le tirage." hidden>
         <legend>Ami(e) 1</legend>
         <div class="grid">
           <label>Prénom *
@@ -173,7 +173,7 @@
         </label>
       </fieldset>
 
-      <fieldset class="step" data-step="2" data-title="Ami(e) 2" data-lead="Le deuxième ami(e). Même infos : prénom, nom, téléphone." hidden>
+      <fieldset class="step" data-step="2" data-title="Ami(e) 2" data-lead="Mentionne le nom, prénom et tel de tes amis, ça y est tu es dans le tirage." hidden>
         <legend>Ami(e) 2</legend>
         <div class="grid">
           <label>Prénom *
@@ -188,13 +188,12 @@
         </label>
       </fieldset>
 
-      <fieldset class="step" data-step="3" data-title="Avis Google" data-lead="Optionnel. Tire une salle au hasard, laisse l’avis, envoie le screen. Jusqu’à 3 avis = x4." hidden>
-        <legend>3 avis Google</legend>
-        <p class="avis-intro">Clique sur <strong>Tirer une salle</strong> : une des 5 fiches Boxing Center s’ouvre. Laisse l’avis, reviens, et charge le screen. Chaque preuve = +1 ticket.</p>
+      <fieldset class="step" id="step-avis" data-step="3" data-title="Avis Google" data-lead="Laisse un avis Google sur BC, envoie le screen. L’avis te rapporte un ticket supplémentaire." hidden>
+        <legend>1 avis Google</legend>
+        <p class="avis-intro">Laisse un avis Google et gagne un ticket supplémentaire. Ouvre une fiche Boxing Center, dépose l’avis, puis charge le screen.</p>
         <div class="avis-list" id="avis-list">
           <article class="avis-card" data-avis="0">
-            <span class="avis-card__n">01</span>
-            <button type="button" class="btn btn-ghost avis-draw">Tirer une salle</button>
+            <button type="button" class="btn btn-ghost avis-draw">Ouvrir la fiche Google</button>
             <div class="avis-picked" hidden>
               <strong class="avis-name"></strong>
               <a class="avis-link" target="_blank" rel="noopener">Ouvrir la fiche Google</a>
@@ -205,34 +204,6 @@
             </div>
             <input type="hidden" name="avis_salle_0" />
             <input type="hidden" name="avis_proof_0" />
-          </article>
-          <article class="avis-card" data-avis="1">
-            <span class="avis-card__n">02</span>
-            <button type="button" class="btn btn-ghost avis-draw">Tirer une salle</button>
-            <div class="avis-picked" hidden>
-              <strong class="avis-name"></strong>
-              <a class="avis-link" target="_blank" rel="noopener">Ouvrir la fiche Google</a>
-              <label>Screen de ton avis
-                <input type="file" accept="image/*" class="avis-file" />
-              </label>
-              <p class="avis-ok" hidden>Preuve ajoutée · +1 ticket</p>
-            </div>
-            <input type="hidden" name="avis_salle_1" />
-            <input type="hidden" name="avis_proof_1" />
-          </article>
-          <article class="avis-card" data-avis="2">
-            <span class="avis-card__n">03</span>
-            <button type="button" class="btn btn-ghost avis-draw">Tirer une salle</button>
-            <div class="avis-picked" hidden>
-              <strong class="avis-name"></strong>
-              <a class="avis-link" target="_blank" rel="noopener">Ouvrir la fiche Google</a>
-              <label>Screen de ton avis
-                <input type="file" accept="image/*" class="avis-file" />
-              </label>
-              <p class="avis-ok" hidden>Preuve ajoutée · +1 ticket</p>
-            </div>
-            <input type="hidden" name="avis_salle_2" />
-            <input type="hidden" name="avis_proof_2" />
           </article>
         </div>
       </fieldset>
@@ -248,6 +219,10 @@
       <div class="step-nav">
         <button type="button" class="btn btn-ghost" id="step-back" hidden>Retour</button>
         <button type="button" class="btn btn-pulse" id="step-next">Continuer</button>
+        <div class="avis-actions" id="avis-actions" hidden>
+          <button type="button" class="btn btn-ghost" id="avis-skip">Continuer sans avis google (1 ticket)</button>
+          <button type="button" class="btn btn-pulse" id="avis-ok">Valider mon avis google (2 tickets)</button>
+        </div>
         <button class="btn btn-pulse" type="submit" id="submit" hidden>Valider ma participation</button>
       </div>
     </form>

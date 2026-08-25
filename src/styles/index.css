@@ -686,11 +686,24 @@ h2 { font-size: clamp(2.1rem, 8vw, 3.6rem); }
 }
 .step-nav {
   display: flex;
+  flex-wrap: wrap;
   gap: .7rem;
   margin-top: .35rem;
 }
 .step-nav .btn { width: auto; flex: 1; max-width: none; }
 .step-nav .btn-ghost { flex: 0 0 auto; min-width: 7.5rem; }
+.avis-actions {
+  display: grid;
+  gap: .55rem;
+  flex: 1 1 100%;
+}
+.avis-actions[hidden] { display: none !important; }
+.avis-actions .btn {
+  width: 100%;
+  max-width: none;
+  min-height: 48px;
+  font-size: .92rem;
+}
 
 .odds {
   position: fixed;
@@ -789,7 +802,7 @@ h2 { font-size: clamp(2.1rem, 8vw, 3.6rem); }
   }
   .odds__kicker { font-size: .72rem; letter-spacing: .16em; }
   .odds #odds-label { font-size: 2.6rem; }
-  .odds__pips { grid-template-columns: repeat(4, 1fr); gap: .4rem; }
+  .odds__pips { grid-template-columns: repeat(2, 1fr); gap: .4rem; }
   .odds__hint { font-size: .72rem; }
 }
 
