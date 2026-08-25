@@ -885,6 +885,35 @@ input:focus, select:focus {
   font-size: .92rem;
   line-height: 1.45;
 }
+.google-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  white-space: nowrap;
+  vertical-align: baseline;
+}
+.google-mark {
+  width: 1.05em;
+  height: 1.05em;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+.btn .google-brand,
+.avis-link .google-brand {
+  margin-left: .1rem;
+}
+.avis-draw {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .35rem;
+  flex-wrap: wrap;
+}
+.avis-hint {
+  margin: -.35rem 0 .85rem;
+  color: var(--ink-3);
+  font-size: .82rem;
+}
 .avis-list {
   display: grid;
   gap: .85rem;

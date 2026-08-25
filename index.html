@@ -81,8 +81,8 @@
 
   <div class="ticker" aria-hidden="true">
     <div class="ticker__track">
-      <span>10 abonnements ◆ 400 € ◆ 1 gagnant / soir ◆ 10 jours ◆ invite 2 ami(e)s ◆ 1 avis Google = +1 ticket ◆ </span>
-      <span>10 abonnements ◆ 400 € ◆ 1 gagnant / soir ◆ 10 jours ◆ invite 2 ami(e)s ◆ 1 avis Google = +1 ticket ◆ </span>
+      <span>10 abonnements ◆ 400 € ◆ 1 gagnant / soir ◆ 10 jours ◆ invite 2 ami(e)s ◆ 1 avis <span class="google-brand">Google<img src="/img/google-logo.svg" alt="" class="google-mark" width="18" height="18" decoding="async" /></span> = +1 ticket ◆ </span>
+      <span>10 abonnements ◆ 400 € ◆ 1 gagnant / soir ◆ 10 jours ◆ invite 2 ami(e)s ◆ 1 avis <span class="google-brand">Google<img src="/img/google-logo.svg" alt="" class="google-mark" width="18" height="18" decoding="async" /></span> = +1 ticket ◆ </span>
     </div>
   </div>
 </section>
@@ -104,7 +104,7 @@
     <li class="round" data-reveal>
       <span class="round__n">03</span>
       <h3>Boost tes chances</h3>
-      <p>1 avis Google. Laisse un avis Google sur BC, envoie le screen. L’avis te rapporte un ticket supplémentaire.</p>
+      <p>1 avis <span class="google-brand">Google<img src="/img/google-logo.svg" alt="" class="google-mark" width="18" height="18" decoding="async" /></span>. Laisse un avis <span class="google-brand">Google<img src="/img/google-logo.svg" alt="" class="google-mark" width="18" height="18" decoding="async" /></span> sur BC, envoie le screen. L’avis te rapporte un ticket supplémentaire.</p>
     </li>
   </ol>
   <p class="promise" data-reveal>Tirage chaque soir pendant 10 jours, dès le <strong>1er septembre 2026</strong>.</p>
@@ -117,7 +117,7 @@
     <div class="odds__pips" id="odds-pips">
       <i class="is-on"></i><i></i>
     </div>
-    <p class="odds__hint">Laisse un avis Google et gagne un ticket supplémentaire</p>
+    <p class="odds__hint">Laisse un avis <span class="google-brand">Google<img src="/img/google-logo.svg" alt="" class="google-mark" width="18" height="18" decoding="async" /></span> et gagne un ticket supplémentaire</p>
     <span class="odds__bump" id="odds-bump" aria-hidden="true">+1</span>
   </aside>
   <div class="card" data-reveal>
@@ -189,14 +189,15 @@
       </fieldset>
 
       <fieldset class="step" id="step-avis" data-step="3" data-title="Avis Google" data-lead="Laisse un avis Google sur BC, envoie le screen. L’avis te rapporte un ticket supplémentaire." hidden>
-        <legend>1 avis Google</legend>
-        <p class="avis-intro">Laisse un avis Google et gagne un ticket supplémentaire. Ouvre une fiche Boxing Center, dépose l’avis, puis charge le screen.</p>
+        <legend>1 avis <span class="google-brand">Google<img src="/img/google-logo.svg" alt="" class="google-mark" width="18" height="18" decoding="async" /></span></legend>
+        <p class="avis-intro">Laisse un avis <span class="google-brand">Google<img src="/img/google-logo.svg" alt="" class="google-mark" width="18" height="18" decoding="async" /></span> et gagne un ticket supplémentaire. Ouvre une fiche Boxing Center, dépose l’avis, puis charge le screen.</p>
+        <p class="avis-hint">Une salle Boxing Center est tirée au sort à chaque clic.</p>
         <div class="avis-list" id="avis-list">
           <article class="avis-card" data-avis="0">
-            <button type="button" class="btn btn-ghost avis-draw">Ouvrir la fiche Google</button>
+            <button type="button" class="btn btn-ghost avis-draw" data-google-before="Ouvrir la fiche "></button>
             <div class="avis-picked" hidden>
               <strong class="avis-name"></strong>
-              <a class="avis-link" target="_blank" rel="noopener">Ouvrir la fiche Google</a>
+              <a class="avis-link" target="_blank" rel="noopener" data-google-before="Ouvrir la fiche "></a>
               <label>Screen de ton avis
                 <input type="file" accept="image/*" class="avis-file" />
               </label>
@@ -220,8 +221,8 @@
         <button type="button" class="btn btn-ghost" id="step-back" hidden>Retour</button>
         <button type="button" class="btn btn-pulse" id="step-next">Continuer</button>
         <div class="avis-actions" id="avis-actions" hidden>
-          <button type="button" class="btn btn-ghost" id="avis-skip">Continuer sans avis google (1 ticket)</button>
-          <button type="button" class="btn btn-pulse" id="avis-ok">Valider mon avis google (2 tickets)</button>
+          <button type="button" class="btn btn-ghost" id="avis-skip" data-google-before="Continuer sans avis " data-google-after=" (1 ticket)"></button>
+          <button type="button" class="btn btn-pulse" id="avis-ok" data-google-before="Valider mon avis " data-google-after=" (2 tickets)"></button>
         </div>
         <button class="btn btn-pulse" type="submit" id="submit" hidden>Valider ma participation</button>
       </div>

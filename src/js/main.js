@@ -1,6 +1,7 @@
 import { readInviteToken, readSource, track } from './track.js';
 import { bindOdds, bootMotion, celebrate } from './motion.js';
 import { bindAvis, collectAvis } from './avis.js';
+import { initGoogleBrands, setGoogleLabel } from './google-brand.js';
 
 const form = document.getElementById('form');
 const errorEl = document.getElementById('form-error');
@@ -16,6 +17,7 @@ track('page_vue');
 bootMotion();
 bindOdds(form);
 bindAvis(form);
+initGoogleBrands(form);
 bindSteps(form);
 
 let started = false;
@@ -134,7 +136,7 @@ function bindSteps(root) {
     const picked = root.querySelector('.avis-picked');
     if (picked) picked.hidden = true;
     const draw = root.querySelector('.avis-draw');
-    if (draw) draw.textContent = 'Ouvrir la fiche Google';
+    if (draw) setGoogleLabel(draw, 'Ouvrir la fiche ', '');
     root.dispatchEvent(new Event('odds-refresh'));
     goNext();
   });
