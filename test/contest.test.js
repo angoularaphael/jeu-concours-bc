@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { after, before, describe, it } from 'node:test';
 import { enterContest, parseEntry } from '../lib/contest.js';
+import { nextAvisSalle, SALLES } from '../lib/salles.js';
 import { getContactByPhoneKey, listContacts, resetMemoryStore } from '../lib/store.js';
 
 process.env.LEADS_BACKEND = 'memory';
@@ -75,6 +76,20 @@ describe('parseEntry', () => {
       avis: [{ salle: 'minimes', proof: '' }],
     });
     assert.equal(parsed.ok, false);
+  });
+
+  it('limite les avis à Minimes et Saint-Cyprien', () => {
+    const proof = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';
+    assert.deepEqual(SALLES.map((s) => s.id), ['minimes', 'st-cyprien']);
+    assert.equal(parseEntry({ ...valid, avis: [{ salle: 'portet', proof }] }).ok, false);
+    assert.equal(parseEntry({ ...valid, avis: [{ salle: 'st-cyprien', proof }] }).ok, true);
+  });
+
+  it('alterne strictement les deux fiches après le premier choix', () => {
+    assert.equal(nextAvisSalle('', () => 0).id, 'minimes');
+    assert.equal(nextAvisSalle('', () => 0.99).id, 'st-cyprien');
+    assert.equal(nextAvisSalle('minimes').id, 'st-cyprien');
+    assert.equal(nextAvisSalle('st-cyprien').id, 'minimes');
   });
 
   it('refuse un email manquant ou invalide', () => {

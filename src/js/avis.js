@@ -1,4 +1,4 @@
-import { SALLES } from '../../lib/salles.js';
+import { nextAvisSalle } from '../../lib/salles.js';
 
 async function fileToProof(file) {
   const bitmap = await createImageBitmap(file);
@@ -11,18 +11,6 @@ async function fileToProof(file) {
   ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
   bitmap.close?.();
   return canvas.toDataURL('image/jpeg', 0.72);
-}
-
-function usedSalles(root) {
-  return [...root.querySelectorAll('[name^="avis_salle_"]')]
-    .map((el) => el.value)
-    .filter(Boolean);
-}
-
-function pickSalle(except) {
-  const pool = SALLES.filter((s) => !except.includes(s.id));
-  if (!pool.length) return null;
-  return pool[Math.floor(Math.random() * pool.length)];
 }
 
 export function bindAvis(form) {
@@ -40,8 +28,7 @@ export function bindAvis(form) {
     if (!draw || !salleInput) return;
 
     draw.addEventListener('click', () => {
-      const except = usedSalles(form).filter((id) => id !== salleInput.value);
-      const salle = pickSalle(except);
+      const salle = nextAvisSalle(salleInput.value);
       if (!salle) return;
       salleInput.value = salle.id;
       proofInput.value = '';
@@ -64,7 +51,7 @@ export function bindAvis(form) {
       }
       try {
         if (!salleInput.value) {
-          const salle = pickSalle(usedSalles(form));
+          const salle = nextAvisSalle();
           if (salle) {
             salleInput.value = salle.id;
             nameEl.textContent = `Boxing Center ${salle.label}`;
