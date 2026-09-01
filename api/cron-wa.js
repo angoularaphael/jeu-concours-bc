@@ -12,6 +12,6 @@ export default async function handler(req, res) {
     return;
   }
   const dryRun = isDryRunRequest(req, {});
-  const result = await processWaQueue({ dryRun, limit: 30 });
+  const result = await processWaQueue({ dryRun, limit: 80 });
   json(res, 200, { ok: true, ...result });
 }

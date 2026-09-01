@@ -15,7 +15,8 @@
     "preview": "vite preview --port 5620",
     "test": "node --test test/phone.test.js test/contest.test.js test/api.test.js",
     "test:e2e": "playwright test",
-    "db:avis": "node scripts/ensure-avis-column.mjs"
+    "db:avis": "node scripts/ensure-avis-column.mjs",
+    "sms:flush": "node scripts/flush-pending-sms.mjs"
   },
   "devDependencies": {
     "@playwright/test": "^1.55.0",
