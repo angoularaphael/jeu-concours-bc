@@ -841,6 +841,11 @@ legend {
   padding: 0 .4rem;
   color: var(--gold);
 }
+.field-note {
+  margin: -.45rem 0 1rem;
+  font-size: .78rem;
+  color: var(--gold-2);
+}
 label { display: block; font-size: .82rem; color: var(--ink-2); margin-bottom: .85rem; }
 input, select {
   display: block;

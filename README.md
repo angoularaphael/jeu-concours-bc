@@ -25,7 +25,9 @@ Variables **Production** (pas de `DRY_RUN`) :
 | `PUBLIC_URL` | `https://concours.boxingcenter.fr` |
 | `ADMIN_TOKEN` | Accès `/admin` (jeton) |
 | `SUPER_ADMIN_EMAIL` / `SUPER_ADMIN_PASSWORD` | Mêmes identifiants que l’admin boutique |
-| `CRON_SECRET` | Relance WhatsApp (bot 24h/24 + cron Vercel quotidien) |
+| `CRON_SECRET` | Relance SMS (bot 24h/24 + cron Vercel quotidien) |
+| `RESEND_API_KEY` | Mails David (`no-reply@boxingcenter.fr`) — boîte principale, pas Promotions |
+| `RESEND_SENDER_NAME` | `David` (défaut) |
 
 DNS : CNAME `concours` → `cname.vercel-dns.com`.  
 SQL : `supabase/001_concours.sql` avant le 1er trafic.

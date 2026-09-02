@@ -45,8 +45,8 @@ const valid = {
   consent_friends: true,
   source: 'meta',
   friends: [
-    { prenom: 'Leo', nom: 'Martin', telephone: '0688888888' },
-    { prenom: 'Nina', nom: 'Bernard', telephone: '0699999999' },
+    { prenom: 'Leo', nom: 'Martin', telephone: '0688888888', email: 'leo.martin@example.com' },
+    { prenom: 'Nina', nom: 'Bernard', telephone: '0699999999', email: 'nina.bernard@example.com' },
   ],
 };
 
@@ -91,8 +91,8 @@ describe('GET /api/admin screen avis', () => {
         ...valid,
         telephone: '0610101010',
         friends: [
-          { prenom: 'Leo', nom: 'Martin', telephone: '0610101011' },
-          { prenom: 'Nina', nom: 'Bernard', telephone: '0610101012' },
+          { prenom: 'Leo', nom: 'Martin', telephone: '0610101011', email: 'leo.proof@example.com' },
+          { prenom: 'Nina', nom: 'Bernard', telephone: '0610101012', email: 'nina.proof@example.com' },
         ],
         avis: [{ salle: 'minimes', proof }],
       }),

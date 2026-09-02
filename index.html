@@ -95,12 +95,12 @@
     <li class="round" data-reveal>
       <span class="round__n">01</span>
       <h3>Inscris-toi</h3>
-      <p>Nom, prénom, téléphone, email. 10 secondes.</p>
+      <p>Nom, prénom, téléphone <strong>et email</strong>. 10 secondes.</p>
     </li>
     <li class="round" data-reveal>
       <span class="round__n">02</span>
       <h3>Invite 2 ami(e)s</h3>
-      <p>Mentionne le nom, prénom et tel de tes amis, <strong>ça y est tu es dans le tirage</strong>. Félicitations, tu viens d’obtenir un ticket pour le grand jeu concours.</p>
+      <p>Mentionne le nom, prénom, tel <strong>et l’email</strong> de tes amis, <strong>ça y est tu es dans le tirage</strong>. Félicitations, tu viens d’obtenir un ticket pour le grand jeu concours.</p>
     </li>
     <li class="round" data-reveal>
       <span class="round__n">03</span>
@@ -125,7 +125,7 @@
     <div class="card__corner" aria-hidden="true"></div>
     <p class="kicker">Carte d’entrée</p>
     <h2 id="form-title">Je m'inscris</h2>
-    <p class="form-lead" id="form-lead">Tes infos d’abord. Ensuite tes 2 ami(e)s : nom, prénom, téléphone.</p>
+    <p class="form-lead" id="form-lead">Désormais l’email est obligatoire — pour toi et tes 2 ami(e)s. On t’écrit depuis David, dans ta boîte principale.</p>
 
     <div class="stepper" id="stepper" aria-label="Progression">
       <div class="stepper__top">
@@ -141,7 +141,7 @@
       <input type="hidden" name="invite_token" id="invite_token" />
       <input type="hidden" name="source" id="source" />
 
-      <fieldset class="step is-on" data-step="0" data-title="Toi" data-lead="Nom, prénom, téléphone, email. Ensuite tes 2 ami(e)s.">
+      <fieldset class="step is-on" data-step="0" data-title="Toi" data-lead="Nom, prénom, téléphone et email obligatoire. Ensuite tes 2 ami(e)s, avec leur email aussi.">
         <legend>Toi</legend>
         <div class="grid">
           <label>Prénom *
@@ -157,9 +157,10 @@
         <label>Email *
           <input name="email" id="email" type="email" autocomplete="email" required maxlength="120" placeholder="toi@email.fr" />
         </label>
+        <p class="field-note">Obligatoire. David t’écrit dans l’onglet Principal, pas Promotions.</p>
       </fieldset>
 
-      <fieldset class="step" data-step="1" data-title="Ami(e) 1" data-lead="Mentionne le nom, prénom et tel de tes amis, ça y est tu es dans le tirage. Félicitations, tu viens d’obtenir un ticket pour le grand jeu concours." hidden>
+      <fieldset class="step" data-step="1" data-title="Ami(e) 1" data-lead="Nom, prénom, tel et email de tes amis. Ça y est tu es dans le tirage." hidden>
         <legend>Ami(e) 1</legend>
         <div class="grid">
           <label>Prénom *
@@ -172,9 +173,13 @@
         <label>Téléphone *
           <input name="ami1_telephone" type="tel" inputmode="tel" required placeholder="06 …" />
         </label>
+        <label>Email *
+          <input name="ami1_email" type="email" required maxlength="120" placeholder="ami@email.fr" />
+        </label>
+        <p class="field-note">L’email de tes ami(e)s est désormais obligatoire.</p>
       </fieldset>
 
-      <fieldset class="step" data-step="2" data-title="Ami(e) 2" data-lead="Mentionne le nom, prénom et tel de tes amis, ça y est tu es dans le tirage. Félicitations, tu viens d’obtenir un ticket pour le grand jeu concours." hidden>
+      <fieldset class="step" data-step="2" data-title="Ami(e) 2" data-lead="Nom, prénom, tel et email de tes amis. Ça y est tu es dans le tirage." hidden>
         <legend>Ami(e) 2</legend>
         <div class="grid">
           <label>Prénom *
@@ -187,6 +192,10 @@
         <label>Téléphone *
           <input name="ami2_telephone" type="tel" inputmode="tel" required placeholder="06 …" />
         </label>
+        <label>Email *
+          <input name="ami2_email" type="email" required maxlength="120" placeholder="ami@email.fr" />
+        </label>
+        <p class="field-note">L’email de tes ami(e)s est désormais obligatoire.</p>
       </fieldset>
 
       <fieldset class="step" id="step-avis" data-step="3" data-title="Avis Google" data-lead="Laisse un avis Google sur BC, envoie le screen. L’avis te rapporte un ticket supplémentaire." hidden>
@@ -235,7 +244,7 @@
   <div class="confirm__burst" aria-hidden="true"><span>10</span></div>
   <p class="kicker">Enregistré</p>
   <h2>Félicitations, tu es dans le tirage</h2>
-  <p>Tu viens d’obtenir un ticket pour le grand jeu concours. Confirmation WhatsApp en route. Tes 2 ami(e)s reçoivent le lien pour finaliser.</p>
+  <p>Tu viens d’obtenir un ticket pour le grand jeu concours. Un mail de David arrive dans ta boîte principale (pas Promotions). Tes 2 ami(e)s reçoivent le lien par mail.</p>
   <p class="already" id="already" hidden>Ce numéro était déjà inscrit. Aucun nouveau message n'a été envoyé.</p>
 </section>
 

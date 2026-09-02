@@ -17,10 +17,12 @@ test('inscription complète', async ({ page }) => {
   await page.locator('[name="ami1_prenom"]').fill('Leo');
   await page.locator('[name="ami1_nom"]').fill('Martin');
   await page.locator('[name="ami1_telephone"]').fill('0622222222');
+  await page.locator('[name="ami1_email"]').fill('leo.martin@example.com');
   await page.getByRole('button', { name: /Continuer/i }).click();
   await page.locator('[name="ami2_prenom"]').fill('Nina');
   await page.locator('[name="ami2_nom"]').fill('Bernard');
   await page.locator('[name="ami2_telephone"]').fill('0633333333');
+  await page.locator('[name="ami2_email"]').fill('nina.bernard@example.com');
   await page.getByRole('button', { name: /Continuer/i }).click();
   await page.getByRole('button', { name: /Continuer sans avis/i }).click();
   await page.locator('[name="consent_age"]').check();

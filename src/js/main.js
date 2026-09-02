@@ -35,7 +35,7 @@ async function loadInvite() {
   if (!data.ok || !data.invite) return;
   document.getElementById('form-title').textContent = 'Je finalise mon inscription';
   document.getElementById('form-lead').textContent =
-    `${data.invite.prenom || 'Tu'} as été invité(e). Vérifie tes infos, puis désigne 2 ami(e)s.`;
+    `${data.invite.prenom || 'Tu'} as été invité(e). Vérifie tes infos (email compris), puis désigne 2 ami(e)s avec leur email.`;
   document.getElementById('prenom').value = data.invite.prenom || '';
   document.getElementById('nom').value = data.invite.nom || '';
   document.getElementById('email').value = data.invite.email || '';
@@ -188,11 +188,13 @@ form.addEventListener('submit', async (e) => {
         prenom: fd.get('ami1_prenom'),
         nom: fd.get('ami1_nom'),
         telephone: fd.get('ami1_telephone'),
+        email: fd.get('ami1_email'),
       },
       {
         prenom: fd.get('ami2_prenom'),
         nom: fd.get('ami2_nom'),
         telephone: fd.get('ami2_telephone'),
+        email: fd.get('ami2_email'),
       },
     ],
   };

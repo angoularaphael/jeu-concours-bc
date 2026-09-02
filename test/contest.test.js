@@ -19,8 +19,8 @@ const valid = {
   consent_friends: true,
   source: 'story',
   friends: [
-    { prenom: 'Leo', nom: 'Martin', telephone: '0622222222' },
-    { prenom: 'Nina', nom: 'Bernard', telephone: '0633333333' },
+    { prenom: 'Leo', nom: 'Martin', telephone: '0622222222', email: 'leo.martin@example.com' },
+    { prenom: 'Nina', nom: 'Bernard', telephone: '0633333333', email: 'nina.bernard@example.com' },
   ],
 };
 
@@ -35,8 +35,8 @@ describe('parseEntry', () => {
     const parsed = parseEntry({
       ...valid,
       friends: [
-        { prenom: 'A', nom: 'A', telephone: '0622222222' },
-        { prenom: 'B', nom: 'B', telephone: '0622222222' },
+        { prenom: 'A', nom: 'A', telephone: '0622222222', email: 'a@example.com' },
+        { prenom: 'B', nom: 'B', telephone: '0622222222', email: 'b@example.com' },
       ],
     });
     assert.equal(parsed.ok, false);
@@ -99,6 +99,18 @@ describe('parseEntry', () => {
     assert.equal(ok.ok, true);
     assert.equal(ok.data.email, 'camille.durand@example.com');
   });
+
+  it('refuse un ami(e) sans email', () => {
+    const parsed = parseEntry({
+      ...valid,
+      friends: [
+        { prenom: 'Leo', nom: 'Martin', telephone: '0622222222' },
+        { prenom: 'Nina', nom: 'Bernard', telephone: '0633333333', email: 'nina.bernard@example.com' },
+      ],
+    });
+    assert.equal(parsed.ok, false);
+    assert.ok(parsed.errors.some((e) => e.field === 'ami1_email'));
+  });
 });
 
 describe('enterContest', () => {
@@ -122,6 +134,8 @@ describe('enterContest', () => {
     assert.equal(all.length, 3);
     const camille = await getContactByPhoneKey('611111111');
     assert.equal(camille.email, 'camille.durand@example.com');
+    const leo = await getContactByPhoneKey('622222222');
+    assert.equal(leo.email, 'leo.martin@example.com');
   });
 
   it('détecte un doublon participant', async () => {
@@ -140,8 +154,8 @@ describe('enterContest', () => {
         ...valid,
         telephone: '0644444444',
         friends: [
-          { prenom: 'Leo', nom: 'Martin', telephone: '0622222222' },
-          { prenom: 'Bad', nom: 'Num', telephone: '0000000000' },
+          { prenom: 'Leo', nom: 'Martin', telephone: '0622222222', email: 'leo.martin@example.com' },
+          { prenom: 'Bad', nom: 'Num', telephone: '0000000000', email: 'bad.num@example.com' },
         ],
       },
       { publicUrl: 'http://127.0.0.1:5620', dryRun: true }
@@ -171,8 +185,8 @@ describe('enterContest', () => {
         consent_reglement: true,
         consent_friends: true,
         friends: [
-          { prenom: 'Eve', nom: 'Petit', telephone: '0655555555' },
-          { prenom: 'Max', nom: 'Leroy', telephone: '0666666666' },
+          { prenom: 'Eve', nom: 'Petit', telephone: '0655555555', email: 'eve.petit@example.com' },
+          { prenom: 'Max', nom: 'Leroy', telephone: '0666666666', email: 'max.leroy@example.com' },
         ],
       },
       { publicUrl: 'http://127.0.0.1:5620', dryRun: true }
