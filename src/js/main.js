@@ -35,7 +35,7 @@ async function loadInvite() {
   if (!data.ok || !data.invite) return;
   document.getElementById('form-title').textContent = 'Je finalise mon inscription';
   document.getElementById('form-lead').textContent =
-    `${data.invite.prenom || 'Tu'} as été invité(e). Vérifie tes infos (email compris), puis désigne 2 ami(e)s avec leur email.`;
+    `${data.invite.prenom || 'Tu'} as été invité(e). Vérifie tes infos (ton email compris), puis désigne 2 ami(e)s. Leur email est facultatif.`;
   document.getElementById('prenom').value = data.invite.prenom || '';
   document.getElementById('nom').value = data.invite.nom || '';
   document.getElementById('email').value = data.invite.email || '';

@@ -100,11 +100,24 @@ describe('parseEntry', () => {
     assert.equal(ok.data.email, 'camille.durand@example.com');
   });
 
-  it('refuse un ami(e) sans email', () => {
+  it('accepte un ami(e) sans email', () => {
     const parsed = parseEntry({
       ...valid,
       friends: [
         { prenom: 'Leo', nom: 'Martin', telephone: '0622222222' },
+        { prenom: 'Nina', nom: 'Bernard', telephone: '0633333333', email: 'nina.bernard@example.com' },
+      ],
+    });
+    assert.equal(parsed.ok, true, JSON.stringify(parsed.errors));
+    assert.equal(parsed.data.friends[0].email, '');
+    assert.equal(parsed.data.friends[1].email, 'nina.bernard@example.com');
+  });
+
+  it('refuse un email ami(e) invalide s’il est renseigné', () => {
+    const parsed = parseEntry({
+      ...valid,
+      friends: [
+        { prenom: 'Leo', nom: 'Martin', telephone: '0622222222', email: 'pas-un-email' },
         { prenom: 'Nina', nom: 'Bernard', telephone: '0633333333', email: 'nina.bernard@example.com' },
       ],
     });
@@ -136,6 +149,28 @@ describe('enterContest', () => {
     assert.equal(camille.email, 'camille.durand@example.com');
     const leo = await getContactByPhoneKey('622222222');
     assert.equal(leo.email, 'leo.martin@example.com');
+  });
+
+  it('inscrit même si les ami(e)s n’ont pas d’email', async () => {
+    const result = await enterContest(
+      {
+        ...valid,
+        telephone: '0611111112',
+        email: 'camille2@example.com',
+        friends: [
+          { prenom: 'Hugo', nom: 'Petit', telephone: '0644444444' },
+          { prenom: 'Jade', nom: 'Leroy', telephone: '0655555555' },
+        ],
+      },
+      { publicUrl: 'http://127.0.0.1:5620', dryRun: true },
+    );
+    assert.equal(result.ok, true, JSON.stringify(result));
+    const hugo = await getContactByPhoneKey('644444444');
+    assert.equal(hugo.email, null);
+    assert.equal(result.friends[0].email_sent, false);
+    assert.equal(result.friends[1].email_sent, false);
+    const jade = await getContactByPhoneKey('655555555');
+    assert.equal(jade.email, null);
   });
 
   it('détecte un doublon participant', async () => {
