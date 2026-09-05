@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { after, before, describe, it } from 'node:test';
-import { enterContest, parseEntry } from '../lib/contest.js';
+import { enterContest, kpis, parseEntry } from '../lib/contest.js';
 import { nextAvisSalle, SALLES } from '../lib/salles.js';
 import { getContactByPhoneKey, listContacts, resetMemoryStore } from '../lib/store.js';
 
@@ -174,13 +174,15 @@ describe('enterContest', () => {
     assert.equal(jade.email, null);
   });
 
-  it('détecte un doublon participant', async () => {
+  it('détecte un doublon participant mais relance quand même les ami(e)s', async () => {
     const again = await enterContest(valid, {
       publicUrl: 'http://127.0.0.1:5620',
       dryRun: true,
     });
     assert.equal(again.ok, true);
     assert.equal(again.already_registered, true);
+    assert.equal(again.friends.length, 2);
+    assert.equal(again.friends[0].reason, 'already_invited');
   });
 
   it('marque un numéro ami invalide sans bloquer l’inscrit', async () => {
@@ -229,6 +231,24 @@ describe('enterContest', () => {
     );
     assert.equal(second.ok, true, JSON.stringify(second));
     assert.equal(second.participant.status, 'inscription_finalisee');
+  });
+});
+
+describe('kpis', () => {
+  it('compte les contacts générés via invited_by_id même sans ligne concours_invites', () => {
+    const inviterId = '11111111-1111-1111-1111-111111111111';
+    const inviteeId = '22222222-2222-2222-2222-222222222222';
+    const stats = kpis({
+      contacts: [
+        { id: inviterId, role: 'participant', status: 'inscrit', tickets: 1 },
+        { id: inviteeId, role: 'invite', status: 'invite', invited_by_id: inviterId, tickets: 1 },
+      ],
+      invites: [],
+      events: [],
+      queue: [],
+    });
+    assert.equal(stats.generated_by[inviterId], 1);
+    assert.equal(stats.amis_invites, 1);
   });
 });
 
