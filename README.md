@@ -19,8 +19,8 @@ Variables **Production** (pas de `DRY_RUN`) :
 
 | Variable | Rôle |
 |---|---|
-| `WHATSAPP_BOT_URL` | Bot Baileys (`/api/send-message`) |
-| `WHATSAPP_BOT_SECRET` | Header `x-api-secret` |
+| `SMS_GATEWAY_URL` / `SMS_GATEWAY_EMAIL` / `SMS_GATEWAY_PASSWORD` | Passerelle SMS (remplace WhatsApp) |
+| `SMS_GATEWAY_SECRET` | Header optionnel si la gateway l’exige |
 | `SUPABASE_URL` / `SUPABASE_SERVICE_ROLE_KEY` | Persistance + sync CRM |
 | `PUBLIC_URL` | `https://concours.boxingcenter.fr` |
 | `ADMIN_TOKEN` | Accès `/admin` (jeton) |
@@ -32,7 +32,7 @@ Variables **Production** (pas de `DRY_RUN`) :
 DNS : CNAME `concours` → `cname.vercel-dns.com`.  
 SQL : `supabase/001_concours.sql` avant le 1er trafic.
 
-En production, `?test=1` **n’empêche plus** l’envoi WhatsApp. Le dry-run n’existe qu’avec `DRY_RUN=1` (local).
+En production, `?test=1` **n’empêche plus** l’envoi SMS. Le dry-run n’existe qu’avec `DRY_RUN=1` (local).
 
 ## Local
 
@@ -70,7 +70,7 @@ Les invitations ami(e)s ajoutent toutes seules `/?inv=TOKEN` : ne pas y toucher.
 
 Pixel Meta / GA4 : pas obligatoire pour le suivi interne. Si une pub Meta a besoin d’un pixel, on pourra l’ajouter plus tard avec l’ID du compte pub.
 
-## Relance WhatsApp 24h/24
+## Relance SMS 24h/24
 
 Le cron Vercel Hobby ne tourne qu’une fois par jour. La relance minute passe par le bot BotHosting :
 
@@ -81,4 +81,6 @@ CONCOURS_CRON_URL=https://concours.boxingcenter.fr/api/cron-wa
 CONCOURS_CRON_SECRET=<même valeur que CRON_SECRET du concours>
 ```
 
-Puis redémarrer le bot. Sans ça, les WhatsApp ratés ne sont repris que le matin.
+Puis redémarrer le bot. Sans ça, les SMS ratés ne sont repris que le matin.
+
+Flush manuel des SMS en file : `npm run sms:flush` (lit `.env.production` en local).

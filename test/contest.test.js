@@ -50,7 +50,7 @@ describe('parseEntry', () => {
     const withAvis = parseEntry({
       ...valid,
       avis: [
-        { salle: 'minimes', proof },
+        { salle: 'st-cyprien', proof },
         { salle: 'portet', proof },
       ],
     });
@@ -61,10 +61,10 @@ describe('parseEntry', () => {
   it('compte 1 ticket sans avis, 2 tickets avec un avis Google', async () => {
     const { ticketCount } = await import('../lib/contest.js');
     assert.equal(ticketCount({ avis: [] }), 1);
-    assert.equal(ticketCount({ avis: [{ salle: 'minimes' }] }), 2);
+    assert.equal(ticketCount({ avis: [{ salle: 'st-cyprien' }] }), 2);
     assert.equal(
       ticketCount({
-        avis: [{ salle: 'minimes' }, { salle: 'portet' }, { salle: 'st-cyprien' }],
+        avis: [{ salle: 'st-cyprien' }, { salle: 'portet' }, { salle: 'minimes' }],
       }),
       2
     );
@@ -73,23 +73,24 @@ describe('parseEntry', () => {
   it('refuse un avis sans screen', () => {
     const parsed = parseEntry({
       ...valid,
-      avis: [{ salle: 'minimes', proof: '' }],
+      avis: [{ salle: 'st-cyprien', proof: '' }],
     });
     assert.equal(parsed.ok, false);
   });
 
-  it('limite les avis à Minimes et Saint-Cyprien', () => {
+  it('limite les avis à Saint-Cyprien uniquement', () => {
     const proof = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';
-    assert.deepEqual(SALLES.map((s) => s.id), ['minimes', 'st-cyprien']);
+    assert.deepEqual(SALLES.map((s) => s.id), ['st-cyprien']);
     assert.equal(parseEntry({ ...valid, avis: [{ salle: 'portet', proof }] }).ok, false);
+    assert.equal(parseEntry({ ...valid, avis: [{ salle: 'minimes', proof }] }).ok, false);
     assert.equal(parseEntry({ ...valid, avis: [{ salle: 'st-cyprien', proof }] }).ok, true);
   });
 
-  it('alterne strictement les deux fiches après le premier choix', () => {
-    assert.equal(nextAvisSalle('', () => 0).id, 'minimes');
+  it('propose toujours la fiche Saint-Cyprien', () => {
+    assert.equal(nextAvisSalle('').id, 'st-cyprien');
     assert.equal(nextAvisSalle('', () => 0.99).id, 'st-cyprien');
+    assert.equal(nextAvisSalle('st-cyprien').id, 'st-cyprien');
     assert.equal(nextAvisSalle('minimes').id, 'st-cyprien');
-    assert.equal(nextAvisSalle('st-cyprien').id, 'minimes');
   });
 
   it('refuse un email manquant ou invalide', () => {

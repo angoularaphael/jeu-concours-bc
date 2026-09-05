@@ -94,7 +94,7 @@ describe('GET /api/admin screen avis', () => {
           { prenom: 'Leo', nom: 'Martin', telephone: '0610101011', email: 'leo.proof@example.com' },
           { prenom: 'Nina', nom: 'Bernard', telephone: '0610101012', email: 'nina.proof@example.com' },
         ],
-        avis: [{ salle: 'minimes', proof }],
+        avis: [{ salle: 'st-cyprien', proof }],
       }),
       created
     );

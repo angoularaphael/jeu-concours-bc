@@ -36,7 +36,7 @@ export function bindAvis(form) {
       link.href = salle.maps;
       picked.hidden = false;
       ok.hidden = true;
-      draw.textContent = 'Ouvrir une autre fiche';
+      draw.textContent = 'Rouvrir la fiche Google';
       form.dispatchEvent(new Event('odds-refresh'));
       window.open(salle.maps, '_blank', 'noopener');
     });
