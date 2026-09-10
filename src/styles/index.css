@@ -1873,20 +1873,49 @@ input:focus, select:focus {
     font-size: .67rem;
   }
   .fight-night {
-    min-height: 42rem;
+    min-height: auto;
   }
   .fight-night__image { background-position: 62% center; }
   .fight-night::after {
-    background: linear-gradient(180deg, rgb(0 0 0 / .08), rgb(0 0 0 / .52) 42%, #050505 78%);
+    background:
+      linear-gradient(180deg, rgb(0 0 0 / .72) 0%, rgb(0 0 0 / .45) 38%, rgb(0 0 0 / .82) 100%),
+      linear-gradient(90deg, rgb(0 0 0 / .55), transparent 70%);
   }
   .fight-night__content {
-    align-content: end;
-    grid-template-columns: auto 1fr;
-    padding: 3rem 1.25rem 3.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .35rem;
+    min-height: clamp(24rem, 72vw, 32rem);
+    justify-content: flex-end;
+    padding: 2.5rem 1.25rem 2.75rem;
   }
-  .fight-night__number { font-size: clamp(8rem, 40vw, 11rem); }
-  .fight-night h2 { font-size: clamp(3rem, 14vw, 4.4rem); }
-  .fight-night__content div p { font-size: .88rem; }
+  .fight-night__eyebrow {
+    grid-column: auto;
+    margin: 0 0 .65rem;
+    font-size: .68rem;
+    letter-spacing: .2em;
+  }
+  .fight-night__number {
+    font-size: clamp(4.5rem, 24vw, 6.5rem);
+    line-height: .9;
+    margin: 0 0 .15rem;
+    text-shadow: 6px 6px 0 rgb(0 0 0 / .72);
+  }
+  .fight-night h2 {
+    max-width: none;
+    font-size: clamp(2.35rem, 11vw, 3.1rem);
+    margin: 0 0 .25rem;
+  }
+  .fight-night__content div p {
+    font-size: .88rem;
+    max-width: 20rem;
+  }
+  .fight-night__date {
+    grid-column: auto;
+    margin-top: 1rem;
+    font-size: 1.25rem;
+  }
   .mma-shots__grid { grid-template-columns: 1fr; }
   .mma-shot__media--victoire { aspect-ratio: 4 / 3; }
 }
@@ -1894,8 +1923,6 @@ input:focus, select:focus {
 @media (max-width: 390px) {
   .stats { gap: .35rem; }
   .stat { padding-inline: .35rem; }
-  .fight-night__content { grid-template-columns: 1fr; }
-  .fight-night__number { margin-bottom: .1em; }
 }
 
 /* Le contenu doit rester visible après un refresh avec restauration du scroll. */
