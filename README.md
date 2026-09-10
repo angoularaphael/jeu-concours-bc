@@ -63,6 +63,9 @@ Le compteur interne est déjà en place (`/api/track` + colonne Source dans `/ad
 | WhatsApp club / coaches | `https://concours.boxingcenter.fr/?src=wa` |
 | Autres pubs | `https://concours.boxingcenter.fr/?src=ads` |
 | QR salle | `https://concours.boxingcenter.fr/?src=qr` |
+| Page MMA WordPress | `https://concours.boxingcenter.fr/?src=mma` |
+
+Bouton à coller sur [cours-de-mma-a-toulouse](https://boxingcenter.fr/cours-de-mma-a-toulouse/) : **TENTE DE GAGNER TA PLACE POUR HEXAGONE MMA** → `https://concours.boxingcenter.fr/?src=mma`.
 
 Tu peux aussi coller les UTM Meta tels quels (`utm_source`, `utm_medium`, `utm_campaign`) : ils sont enregistrés. Le paramètre `src` reste le plus simple pour lire le tableau admin.
 

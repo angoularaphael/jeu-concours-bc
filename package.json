@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "Boxing Center — landing jeu concours 10 ans. Inscription + 2 ami(e)s + WhatsApp.",
+  "description": "Boxing Center — landing jeu concours 10 ans x Hexagone MMA. Inscription + 2 ami(e)s + WhatsApp.",
   "engines": {
     "node": ">=20"
   },

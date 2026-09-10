@@ -10,6 +10,22 @@ function csvEscape(v) {
   return s;
 }
 
+function friendsByInviter(contacts) {
+  const map = new Map();
+  for (const c of contacts) {
+    if (!c?.invited_by_id) continue;
+    const list = map.get(c.invited_by_id) || [];
+    list.push(c);
+    map.set(c.invited_by_id, list);
+  }
+  return map;
+}
+
+function friendCols(friends, n) {
+  const f = friends[n - 1] || {};
+  return [f.prenom, f.nom, f.telephone, f.email];
+}
+
 function parseDataImage(proof) {
   const raw = String(proof || '').trim();
   const m = raw.match(/^data:(image\/(?:jpeg|jpg|png|webp));base64,([A-Za-z0-9+/=\s]+)$/i);
@@ -114,6 +130,7 @@ export default async function handler(req, res) {
   const stats = kpis({ contacts, invites, events, queue });
 
   if (q.export === 'csv' || q.action === 'export') {
+    const invited = friendsByInviter(contacts);
     const header = [
       'id',
       'prenom',
@@ -132,9 +149,18 @@ export default async function handler(req, res) {
       'created_at',
       'finalized_at',
       'contacts_generes',
+      'ami1_prenom',
+      'ami1_nom',
+      'ami1_telephone',
+      'ami1_email',
+      'ami2_prenom',
+      'ami2_nom',
+      'ami2_telephone',
+      'ami2_email',
     ];
     const lines = [header.join(';')];
     for (const c of contacts) {
+      const friends = invited.get(c.id) || [];
       lines.push(
         [
           c.id,
@@ -154,6 +180,8 @@ export default async function handler(req, res) {
           c.created_at,
           c.finalized_at,
           stats.generated_by[c.id] || 0,
+          ...friendCols(friends, 1),
+          ...friendCols(friends, 2),
         ]
           .map(csvEscape)
           .join(';')
@@ -162,7 +190,7 @@ export default async function handler(req, res) {
     const csv = `\uFEFF${lines.join('\n')}`;
     res.statusCode = 200;
     res.setHeader('Content-Type', 'text/csv; charset=utf-8');
-    res.setHeader('Content-Disposition', 'attachment; filename="concours-10ans.csv"');
+    res.setHeader('Content-Disposition', 'attachment; filename="concours-hexagone-mma.csv"');
     res.setHeader('Cache-Control', 'no-store');
     res.end(csv);
     return;

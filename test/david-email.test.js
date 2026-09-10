@@ -17,6 +17,7 @@ describe('mails David (Principal, pas Promotions)', () => {
     assert.equal(mail.subject, 'Camille, c’est David');
     assert.equal(mail.html, undefined);
     assert.match(mail.emailText, /C’est David\./);
+    assert.match(mail.emailText, /Hexagone MMA/);
     assert.match(mail.emailText, /David de Boxing Center/);
     assert.match(mail.emailText, /https:\/\/concours\.boxingcenter\.fr/);
     assert.doesNotMatch(mail.subject, /Boxing Center|concours|€|gagne/i);
@@ -30,6 +31,7 @@ describe('mails David (Principal, pas Promotions)', () => {
     });
     assert.equal(invite.fromName, 'David');
     assert.match(invite.emailText, /Camille m’a donné ton mail/);
+    assert.match(invite.emailText, /Hexagone MMA/);
     assert.match(invite.emailText, /\?inv=abc/);
     assert.equal(invite.html, undefined);
 

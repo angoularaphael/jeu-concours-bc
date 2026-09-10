@@ -1,7 +1,7 @@
 import { readInviteToken, readSource, track } from './track.js';
 import { bindOdds, bootMotion, celebrate } from './motion.js';
 import { bindAvis, collectAvis } from './avis.js';
-import { initGoogleBrands, setGoogleLabel } from './google-brand.js';
+import { initGoogleBrands } from './google-brand.js';
 
 const form = document.getElementById('form');
 const errorEl = document.getElementById('form-error');
@@ -35,7 +35,7 @@ async function loadInvite() {
   if (!data.ok || !data.invite) return;
   document.getElementById('form-title').textContent = 'Je finalise mon inscription';
   document.getElementById('form-lead').textContent =
-    `${data.invite.prenom || 'Tu'} as été invité(e). Vérifie tes infos (ton email compris), puis désigne 2 ami(e)s. Leur email est facultatif.`;
+    `${data.invite.prenom || 'Tu'} as été invité(e). Vérifie tes infos, laisse un avis Google, puis tu peux ajouter 2 ami(e)s pour un ticket de plus.`;
   document.getElementById('prenom').value = data.invite.prenom || '';
   document.getElementById('nom').value = data.invite.nom || '';
   document.getElementById('email').value = data.invite.email || '';
@@ -62,17 +62,59 @@ function bindSteps(root) {
   const lead = document.getElementById('form-lead');
   const pips = document.querySelectorAll('#step-pips i');
   const avisActions = document.getElementById('avis-actions');
-  const avisSkip = document.getElementById('avis-skip');
   const avisOk = document.getElementById('avis-ok');
+  const amisActions = document.getElementById('amis-actions');
+  const amisSkip = document.getElementById('amis-skip');
+  const amisNext = document.getElementById('amis-next');
+  const friendsConsentRow = document.getElementById('consent-friends-row');
   if (!steps.length || !nextBtn || !submit) return;
 
   let i = 0;
   const titles = steps.map((s) => s.dataset.title || '');
   const leads = steps.map((s) => s.dataset.lead || '');
+  const lastIndex = steps.length - 1;
+
+  const friendFilled = (prefix) =>
+    ['prenom', 'nom', 'telephone'].every((k) => String(root.elements[`${prefix}_${k}`]?.value || '').trim());
+
+  const requireFriend = (prefix) => {
+    for (const k of ['prenom', 'nom', 'telephone']) {
+      const el = root.elements[`${prefix}_${k}`];
+      if (!el) continue;
+      if (!String(el.value || '').trim()) {
+        el.setCustomValidity('Requis pour le ticket bonus');
+        el.reportValidity();
+        el.setCustomValidity('');
+        return false;
+      }
+    }
+    return true;
+  };
+
+  const syncFriendConsent = () => {
+    const need = friendFilled('ami1') && friendFilled('ami2');
+    const cb = root.elements.consent_friends;
+    if (cb) {
+      cb.required = need;
+      if (!need) cb.checked = false;
+    }
+    if (friendsConsentRow) friendsConsentRow.hidden = !need;
+  };
+
+  const clearFriends = () => {
+    for (const prefix of ['ami1', 'ami2']) {
+      for (const k of ['prenom', 'nom', 'telephone', 'email']) {
+        const el = root.elements[`${prefix}_${k}`];
+        if (el) el.value = '';
+      }
+    }
+    syncFriendConsent();
+    root.dispatchEvent(new Event('odds-refresh'));
+  };
 
   const show = (n, dir = 1, { focus = true } = {}) => {
     i = Math.max(0, Math.min(steps.length - 1, n));
-    const last = i === steps.length - 1;
+    const last = i === lastIndex;
     steps.forEach((s, idx) => {
       const on = idx === i;
       s.hidden = !on;
@@ -85,9 +127,12 @@ function bindSteps(root) {
     });
     backBtn.hidden = i === 0;
     const avisStep = steps[i]?.id === 'step-avis';
-    nextBtn.hidden = last || avisStep;
+    const amisStep = steps[i]?.id === 'step-amis';
+    nextBtn.hidden = last || avisStep || amisStep;
     if (avisActions) avisActions.hidden = !avisStep;
+    if (amisActions) amisActions.hidden = !amisStep;
     submit.hidden = !last;
+    if (last) syncFriendConsent();
     if (label) label.textContent = `Round ${i + 1} / ${steps.length}`;
     if (nameEl) nameEl.textContent = titles[i];
     if (lead && leads[i]) lead.textContent = leads[i];
@@ -102,6 +147,7 @@ function bindSteps(root) {
   };
 
   const validStep = () => {
+    if (steps[i]?.dataset.step === '3' && !requireFriend('ami2')) return false;
     const fields = steps[i].querySelectorAll('input, select, textarea');
     for (const f of fields) {
       if (!f.checkValidity()) {
@@ -124,40 +170,34 @@ function bindSteps(root) {
   backBtn.addEventListener('click', () => {
     show(i - 1, -1);
   });
-  avisSkip?.addEventListener('click', () => {
-    const salle = root.elements.avis_salle_0;
-    const proof = root.elements.avis_proof_0;
-    if (salle) salle.value = '';
-    if (proof) proof.value = '';
-    const file = root.querySelector('.avis-file');
-    if (file) file.value = '';
-    const ok = root.querySelector('.avis-ok');
-    if (ok) ok.hidden = true;
-    const picked = root.querySelector('.avis-picked');
-    if (picked) picked.hidden = true;
-    const draw = root.querySelector('.avis-draw');
-    if (draw) setGoogleLabel(draw, 'Ouvrir la fiche ', '');
-    root.dispatchEvent(new Event('odds-refresh'));
-    goNext();
-  });
   avisOk?.addEventListener('click', () => {
     const proof = String(root.elements.avis_proof_0?.value || '');
     if (!proof.startsWith('data:image/')) {
       const file = root.querySelector('.avis-file');
       if (file) file.reportValidity?.();
-      window.alert('Ajoute le screen de ton avis Google pour valider le 2e ticket.');
+      window.alert('Ajoute le screen de ton avis Google pour valider ta participation.');
       return;
     }
+    goNext();
+  });
+  amisSkip?.addEventListener('click', () => {
+    clearFriends();
+    show(lastIndex, 1);
+    root.closest('.card')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+  amisNext?.addEventListener('click', () => {
+    if (!requireFriend('ami1')) return;
     goNext();
   });
   root.addEventListener('keydown', (e) => {
     if (e.key !== 'Enter') return;
     if (e.target.closest('textarea, a, button')) return;
-    if (i >= steps.length - 1) return;
+    if (i >= lastIndex) return;
     e.preventDefault();
-    if (steps[i]?.id === 'step-avis') return;
+    if (steps[i]?.id === 'step-avis' || steps[i]?.id === 'step-amis') return;
     nextBtn.click();
   });
+  root.addEventListener('input', syncFriendConsent);
   show(0, 1, { focus: false });
 }
 
@@ -182,6 +222,7 @@ form.addEventListener('submit', async (e) => {
     consent_age: fd.get('consent_age') === 'on',
     consent_reglement: fd.get('consent_reglement') === 'on',
     consent_friends: fd.get('consent_friends') === 'on',
+    consent_privacy: fd.get('consent_privacy') === 'on',
     avis: collectAvis(form),
     friends: [
       {

@@ -9,6 +9,9 @@ process.env.DRY_RUN = '1';
 delete process.env.WHATSAPP_BOT_URL;
 delete process.env.SUPABASE_URL;
 
+const proof =
+  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';
+
 const valid = {
   prenom: 'Camille',
   nom: 'Durand',
@@ -17,7 +20,9 @@ const valid = {
   consent_age: true,
   consent_reglement: true,
   consent_friends: true,
+  consent_privacy: true,
   source: 'story',
+  avis: [{ salle: 'st-cyprien', proof }],
   friends: [
     { prenom: 'Leo', nom: 'Martin', telephone: '0622222222', email: 'leo.martin@example.com' },
     { prenom: 'Nina', nom: 'Bernard', telephone: '0633333333', email: 'nina.bernard@example.com' },
@@ -42,29 +47,30 @@ describe('parseEntry', () => {
     assert.equal(parsed.ok, false);
   });
 
-  it('accepte une inscription sans avis et un seul avis Google', () => {
-    const sans = parseEntry(valid);
-    assert.equal(sans.ok, true);
-    assert.equal(sans.data.avis.length, 0);
-    const proof = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';
-    const withAvis = parseEntry({
-      ...valid,
-      avis: [
-        { salle: 'st-cyprien', proof },
-        { salle: 'portet', proof },
-      ],
-    });
-    assert.equal(withAvis.ok, true, JSON.stringify(withAvis.errors));
-    assert.equal(withAvis.data.avis.length, 1);
+  it('refuse une inscription sans avis Google', () => {
+    const sans = parseEntry({ ...valid, avis: [] });
+    assert.equal(sans.ok, false);
+    assert.ok(sans.errors.some((e) => e.field === 'avis'));
   });
 
-  it('compte 1 ticket sans avis, 2 tickets avec un avis Google', async () => {
+  it('accepte une inscription avec avis, sans ami(e)s', () => {
+    const parsed = parseEntry({ ...valid, friends: [], consent_friends: false });
+    assert.equal(parsed.ok, true, JSON.stringify(parsed.errors));
+    assert.equal(parsed.data.avis.length, 1);
+    assert.equal(parsed.data.friends.length, 0);
+  });
+
+  it('compte 1 ticket avec avis, 2 tickets avec avis + 2 ami(e)s', async () => {
     const { ticketCount } = await import('../lib/contest.js');
-    assert.equal(ticketCount({ avis: [] }), 1);
-    assert.equal(ticketCount({ avis: [{ salle: 'st-cyprien' }] }), 2);
+    assert.equal(ticketCount({ avis: [] }), 0);
+    assert.equal(ticketCount({ avis: [{ salle: 'st-cyprien' }] }), 1);
     assert.equal(
       ticketCount({
-        avis: [{ salle: 'st-cyprien' }, { salle: 'portet' }, { salle: 'minimes' }],
+        avis: [{ salle: 'st-cyprien' }],
+        friends: [
+          { prenom: 'A', nom: 'A', telephone: '0611111112' },
+          { prenom: 'B', nom: 'B', telephone: '0611111113' },
+        ],
       }),
       2
     );
@@ -78,19 +84,27 @@ describe('parseEntry', () => {
     assert.equal(parsed.ok, false);
   });
 
-  it('limite les avis à Saint-Cyprien uniquement', () => {
-    const proof = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';
-    assert.deepEqual(SALLES.map((s) => s.id), ['st-cyprien']);
+  it('limite les avis à Saint-Cyprien, Minimes et Toulouse États-Unis', () => {
+    assert.deepEqual(SALLES.map((s) => s.id), ['st-cyprien', 'minimes', 'etats-unis']);
     assert.equal(parseEntry({ ...valid, avis: [{ salle: 'portet', proof }] }).ok, false);
-    assert.equal(parseEntry({ ...valid, avis: [{ salle: 'minimes', proof }] }).ok, false);
+    assert.equal(parseEntry({ ...valid, avis: [{ salle: 'ramonville', proof }] }).ok, false);
     assert.equal(parseEntry({ ...valid, avis: [{ salle: 'st-cyprien', proof }] }).ok, true);
+    assert.equal(parseEntry({ ...valid, avis: [{ salle: 'minimes', proof }] }).ok, true);
+    assert.equal(parseEntry({ ...valid, avis: [{ salle: 'etats-unis', proof }] }).ok, true);
   });
 
-  it('propose toujours la fiche Saint-Cyprien', () => {
-    assert.equal(nextAvisSalle('').id, 'st-cyprien');
-    assert.equal(nextAvisSalle('', () => 0.99).id, 'st-cyprien');
-    assert.equal(nextAvisSalle('st-cyprien').id, 'st-cyprien');
-    assert.equal(nextAvisSalle('minimes').id, 'st-cyprien');
+  it('alterne Saint-Cyprien, Minimes et Toulouse États-Unis', () => {
+    assert.equal(nextAvisSalle('', () => 0).id, 'st-cyprien');
+    assert.equal(nextAvisSalle('', () => 0.99).id, 'etats-unis');
+    assert.equal(nextAvisSalle('st-cyprien').id, 'minimes');
+    assert.equal(nextAvisSalle('minimes').id, 'etats-unis');
+    assert.equal(nextAvisSalle('etats-unis').id, 'st-cyprien');
+  });
+
+  it('exige le consentement ami(e)s seulement si les 2 sont renseigné(e)s', () => {
+    assert.equal(parseEntry({ ...valid, friends: [], consent_friends: false }).ok, true);
+    assert.equal(parseEntry({ ...valid, consent_friends: false }).ok, false);
+    assert.equal(parseEntry({ ...valid, consent_privacy: false }).ok, false);
   });
 
   it('refuse un email manquant ou invalide', () => {
@@ -148,8 +162,26 @@ describe('enterContest', () => {
     assert.equal(all.length, 3);
     const camille = await getContactByPhoneKey('611111111');
     assert.equal(camille.email, 'camille.durand@example.com');
+    assert.equal(camille.tickets, 2);
     const leo = await getContactByPhoneKey('622222222');
     assert.equal(leo.email, 'leo.martin@example.com');
+  });
+
+  it('inscrit avec avis et sans ami(e)s : 1 ticket', async () => {
+    const result = await enterContest(
+      {
+        ...valid,
+        telephone: '0611111199',
+        email: 'camille.solo@example.com',
+        consent_friends: false,
+        friends: [],
+      },
+      { publicUrl: 'http://127.0.0.1:5620', dryRun: true },
+    );
+    assert.equal(result.ok, true, JSON.stringify(result));
+    assert.equal(result.friends.length, 0);
+    const solo = await getContactByPhoneKey('611111199');
+    assert.equal(solo.tickets, 1);
   });
 
   it('inscrit même si les ami(e)s n’ont pas d’email', async () => {
@@ -222,6 +254,8 @@ describe('enterContest', () => {
         consent_age: true,
         consent_reglement: true,
         consent_friends: true,
+        consent_privacy: true,
+        avis: [{ salle: 'minimes', proof }],
         friends: [
           { prenom: 'Eve', nom: 'Petit', telephone: '0655555555', email: 'eve.petit@example.com' },
           { prenom: 'Max', nom: 'Leroy', telephone: '0666666666', email: 'max.leroy@example.com' },

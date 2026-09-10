@@ -91,15 +91,29 @@ function bootDust() {
     c.style.width = `${w}px`;
     c.style.height = `${h}px`;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    const n = Math.round(Math.min(70, (w * h) / 18000));
+    const n = Math.round(Math.min(55, (w * h) / 22000));
     parts = Array.from({ length: n }, () => ({
       x: Math.random() * w,
       y: Math.random() * h,
-      r: Math.random() * 1.6 + 0.3,
-      s: Math.random() * 0.35 + 0.08,
-      a: Math.random() * 0.45 + 0.12,
-      drift: (Math.random() - 0.5) * 0.25,
+      r: Math.random() * 2.2 + 0.6,
+      s: Math.random() * 0.32 + 0.07,
+      a: Math.random() * 0.4 + 0.1,
+      drift: (Math.random() - 0.5) * 0.28,
+      hex: Math.random() > 0.45,
+      hue: Math.random() > 0.7 ? 'cage' : 'gold',
     }));
+  };
+
+  const hex = (ctx, x, y, r) => {
+    ctx.beginPath();
+    for (let i = 0; i < 6; i += 1) {
+      const a = (Math.PI / 3) * i - Math.PI / 6;
+      const px = x + Math.cos(a) * r;
+      const py = y + Math.sin(a) * r;
+      if (i === 0) ctx.moveTo(px, py);
+      else ctx.lineTo(px, py);
+    }
+    ctx.closePath();
   };
 
   const draw = () => {
@@ -107,13 +121,17 @@ function bootDust() {
     for (const p of parts) {
       p.y -= p.s;
       p.x += p.drift;
-      if (p.y < -4) {
-        p.y = h + 4;
+      if (p.y < -6) {
+        p.y = h + 6;
         p.x = Math.random() * w;
       }
-      ctx.fillStyle = `rgba(240, 217, 160, ${p.a})`;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      if (p.hue === 'cage') ctx.fillStyle = `rgba(62, 224, 196, ${p.a})`;
+      else ctx.fillStyle = `rgba(247, 228, 180, ${p.a})`;
+      if (p.hex) hex(ctx, p.x, p.y, p.r);
+      else {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r * 0.55, 0, Math.PI * 2);
+      }
       ctx.fill();
     }
     requestAnimationFrame(draw);
@@ -143,6 +161,7 @@ function bootPointer() {
 function bootParallax() {
   const media = document.querySelector('.hero__media');
   const ten = document.querySelector('.hero__ten');
+  const cage = document.querySelector('.cage');
   if (!media) return;
   let ticking = false;
   const onScroll = () => {
@@ -152,6 +171,7 @@ function bootParallax() {
       const y = window.scrollY;
       media.style.transform = `translate3d(0, ${y * 0.22}px, 0)`;
       if (ten) ten.style.transform = `translate3d(0, ${y * 0.12}px, 0)`;
+      if (cage) cage.style.transform = `translate3d(0, ${y * 0.08}px, 0) rotate(-8deg)`;
       ticking = false;
     });
   };
@@ -190,12 +210,18 @@ export function bindOdds(form) {
   const box = document.getElementById('odds');
   const bump = document.getElementById('odds-bump');
   if (!form || !label || !pips.length) return;
-  let last = 1;
+  let last = 0;
 
   const update = () => {
-    let n = 1;
     const proof = form.querySelector('[name="avis_proof_0"]');
-    if (proof && String(proof.value || '').startsWith('data:image/')) n = 2;
+    const hasAvis = proof && String(proof.value || '').startsWith('data:image/');
+    const filled = (prefix) =>
+      ['prenom', 'nom', 'telephone'].every((k) =>
+        String(form.elements[`${prefix}_${k}`]?.value || '').trim()
+      );
+    let n = 0;
+    if (hasAvis) n = 1;
+    if (hasAvis && filled('ami1') && filled('ami2')) n = 2;
     label.textContent = `×${n}`;
     pips.forEach((pip, i) => pip.classList.toggle('is-on', i < n));
     box.classList.toggle('is-up', n > 1);

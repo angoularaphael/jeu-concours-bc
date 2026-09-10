@@ -43,7 +43,9 @@ const valid = {
   consent_age: true,
   consent_reglement: true,
   consent_friends: true,
+  consent_privacy: true,
   source: 'meta',
+  avis: [{ salle: 'st-cyprien', proof: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==' }],
   friends: [
     { prenom: 'Leo', nom: 'Martin', telephone: '0688888888', email: 'leo.martin@example.com' },
     { prenom: 'Nina', nom: 'Bernard', telephone: '0699999999', email: 'nina.bernard@example.com' },
@@ -71,6 +73,23 @@ describe('POST /api/inscrire', () => {
     assert.equal(res.body.ok, true);
     assert.equal(res.body.participant.status, 'inscrit');
     assert.equal(res.body.friends.length, 2);
+  });
+
+  it('200 dry-run : avis obligatoire, amis optionnels', async () => {
+    const res = mockRes();
+    await handleInscrire(
+      mockReq({
+        ...valid,
+        telephone: '0677777778',
+        email: 'camille.solo@example.com',
+        consent_friends: false,
+        friends: [],
+      }),
+      res
+    );
+    assert.equal(res.statusCode, 200, JSON.stringify(res.body));
+    assert.equal(res.body.ok, true);
+    assert.equal(res.body.friends.length, 0);
   });
 });
 
