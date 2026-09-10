@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { after, before, describe, it } from 'node:test';
 import { enterContest, kpis, parseEntry } from '../lib/contest.js';
-import { nextAvisSalle, SALLES } from '../lib/salles.js';
+import { pickAvisSalle, SALLES } from '../lib/salles.js';
 import { getContactByPhoneKey, listContacts, resetMemoryStore } from '../lib/store.js';
 
 process.env.LEADS_BACKEND = 'memory';
@@ -93,12 +93,13 @@ describe('parseEntry', () => {
     assert.equal(parseEntry({ ...valid, avis: [{ salle: 'etats-unis', proof }] }).ok, true);
   });
 
-  it('alterne Saint-Cyprien, Minimes et Toulouse États-Unis', () => {
-    assert.equal(nextAvisSalle('', () => 0).id, 'st-cyprien');
-    assert.equal(nextAvisSalle('', () => 0.99).id, 'etats-unis');
-    assert.equal(nextAvisSalle('st-cyprien').id, 'minimes');
-    assert.equal(nextAvisSalle('minimes').id, 'etats-unis');
-    assert.equal(nextAvisSalle('etats-unis').id, 'st-cyprien');
+  it('tire une fiche Boxing Center au hasard (40 % États-Unis, 40 % Saint-Cyprien, 20 % Minimes)', () => {
+    assert.equal(pickAvisSalle(() => 0).id, 'etats-unis');
+    assert.equal(pickAvisSalle(() => 0.399).id, 'etats-unis');
+    assert.equal(pickAvisSalle(() => 0.4).id, 'st-cyprien');
+    assert.equal(pickAvisSalle(() => 0.799).id, 'st-cyprien');
+    assert.equal(pickAvisSalle(() => 0.8).id, 'minimes');
+    assert.equal(pickAvisSalle(() => 0.99).id, 'minimes');
   });
 
   it('exige le consentement ami(e)s seulement si les 2 sont renseigné(e)s', () => {

@@ -1,4 +1,29 @@
-import { nextAvisSalle } from '../../lib/salles.js';
+import { boxingCenterLabel, pickAvisSalle } from '../../lib/salles.js';
+
+function applySalleToCard(form, card, salle) {
+  const i = card.dataset.avis;
+  const nameEl = card.querySelector('.avis-name');
+  const link = card.querySelector('.avis-link');
+  const salleInput = form.elements[`avis_salle_${i}`];
+  const proofInput = form.elements[`avis_proof_${i}`];
+  if (!salle || !salleInput) return;
+  salleInput.value = salle.id;
+  if (proofInput) proofInput.value = '';
+  if (nameEl) nameEl.textContent = boxingCenterLabel(salle);
+  if (link) link.href = salle.maps;
+}
+
+export function syncAvisSalleCopy(salle) {
+  if (!salle) return;
+  const label = boxingCenterLabel(salle);
+  document.querySelectorAll('[data-avis-salle-name]').forEach((el) => {
+    el.textContent = label;
+  });
+  const stepAvis = document.getElementById('step-avis');
+  if (stepAvis) {
+    stepAvis.dataset.lead = `Avis Google obligatoire. Ouvre la fiche ${label}, dépose l’avis, charge le screen. 1 ticket.`;
+  }
+}
 
 async function fileToProof(file) {
   const bitmap = await createImageBitmap(file);
@@ -27,18 +52,22 @@ export function bindAvis(form) {
     const proofInput = form.elements[`avis_proof_${i}`];
     if (!draw || !salleInput) return;
 
-    draw.addEventListener('click', () => {
-      const salle = nextAvisSalle(salleInput.value);
+    const showSalle = (salle) => {
       if (!salle) return;
-      salleInput.value = salle.id;
-      proofInput.value = '';
-      nameEl.textContent = `Boxing Center ${salle.label}`;
-      link.href = salle.maps;
+      applySalleToCard(form, card, salle);
+      syncAvisSalleCopy(salle);
       picked.hidden = false;
       ok.hidden = true;
       draw.textContent = 'Rouvrir la fiche Google';
       form.dispatchEvent(new Event('odds-refresh'));
-      window.open(salle.maps, '_blank', 'noopener');
+    };
+
+    const assignedSalle = pickAvisSalle();
+    syncAvisSalleCopy(assignedSalle);
+
+    draw.addEventListener('click', () => {
+      showSalle(assignedSalle);
+      window.open(assignedSalle.maps, '_blank', 'noopener');
     });
 
     file?.addEventListener('change', async () => {
@@ -50,14 +79,10 @@ export function bindAvis(form) {
         return;
       }
       try {
-        if (!salleInput.value) {
-          const salle = nextAvisSalle();
-          if (salle) {
-            salleInput.value = salle.id;
-            nameEl.textContent = `Boxing Center ${salle.label}`;
-            link.href = salle.maps;
-            picked.hidden = false;
-          }
+        if (!salleInput.value && assignedSalle) {
+          applySalleToCard(form, card, assignedSalle);
+          syncAvisSalleCopy(assignedSalle);
+          picked.hidden = false;
         }
         proofInput.value = await fileToProof(blob);
         ok.hidden = false;
