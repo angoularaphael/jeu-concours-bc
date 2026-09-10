@@ -133,7 +133,7 @@ function bindSteps(root) {
     if (amisActions) amisActions.hidden = !amisStep;
     submit.hidden = !last;
     if (last) syncFriendConsent();
-    if (label) label.textContent = `Round ${i + 1} / ${steps.length}`;
+    if (label) label.textContent = `Étape ${i + 1} / ${steps.length}`;
     if (nameEl) nameEl.textContent = titles[i];
     if (lead && leads[i]) lead.textContent = leads[i];
     pips.forEach((pip, idx) => {

@@ -1668,8 +1668,8 @@ h1 {
   transform: scale(1.03);
   filter: contrast(1.12) saturate(1);
 }
-.mma-shot__media--combat { background-image: url("../../COMBATMMA.webp"); }
-.mma-shot__media--victoire { background-image: url("../../VIXTOIREMMA.webp"); }
+.mma-shot__media--combat { background-image: url("../../hexagone-combat.webp"); }
+.mma-shot__media--victoire { background-image: url("../../hexagone-victoire.webp"); }
 .mma-shot figcaption {
   padding: .7rem .85rem .8rem;
   font-family: var(--f-display);
