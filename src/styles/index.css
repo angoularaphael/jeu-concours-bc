@@ -1687,8 +1687,9 @@ h1 {
   transform: scale(1.03);
   filter: contrast(1.12) saturate(1);
 }
-.mma-shot__media--combat { background-image: url("../../hexagone-combat.webp"); }
-.mma-shot__media--victoire { background-image: url("../../hexagone-victoire.webp"); }
+/* hexagone-combat.webp = ceinture ; hexagone-victoire.webp = scène octogone */
+.mma-shot__media--ceinture { background-image: url("../../hexagone-combat.webp"); }
+.mma-shot__media--octogone { background-image: url("../../hexagone-victoire.webp"); }
 .mma-shot figcaption {
   padding: .7rem .85rem .8rem;
   font-family: var(--f-display);
@@ -1942,7 +1943,7 @@ input:focus, select:focus {
     font-size: 1.15rem;
   }
   .mma-shots__grid { grid-template-columns: 1fr; }
-  .mma-shot__media--victoire { aspect-ratio: 4 / 3; }
+  .mma-shot__media--octogone { aspect-ratio: 4 / 3; }
 }
 
 @media (max-width: 390px) {
