@@ -2,7 +2,16 @@ import '../lib/load-env.js';
 import { json, queryFromUrl, readBody } from '../lib/http.js';
 import { adminTokenOk, verifyAdminLogin } from '../lib/admin-auth.js';
 import { kpis } from '../lib/contest.js';
-import { deleteContact, getContactById, listContacts, listEvents, listInvites, listQueueAll } from '../lib/store.js';
+import {
+  deleteContact,
+  getContactById,
+  getStatsResetAt,
+  listContacts,
+  listEvents,
+  listInvites,
+  listQueueAll,
+  resetContestStats,
+} from '../lib/store.js';
 
 function csvEscape(v) {
   const s = v == null ? '' : String(v);
@@ -52,6 +61,19 @@ export default async function handler(req, res) {
       body = await readBody(req);
     } catch {
       json(res, 400, { ok: false, error: 'invalid_json' });
+      return;
+    }
+    if (body.action === 'reset-stats') {
+      if (!adminTokenOk(req)) {
+        json(res, 401, { ok: false, error: 'unauthorized' });
+        return;
+      }
+      try {
+        const stats_reset_at = await resetContestStats();
+        json(res, 200, { ok: true, stats_reset_at });
+      } catch (err) {
+        json(res, 500, { ok: false, error: err.message || 'reset' });
+      }
       return;
     }
     const result = verifyAdminLogin(body);
@@ -120,14 +142,15 @@ export default async function handler(req, res) {
     to: q.to || undefined,
   };
 
-  const [contacts, invites, events, queue] = await Promise.all([
+  const [contacts, invites, events, queue, statsResetAt] = await Promise.all([
     listContacts(filters),
     listInvites(),
     listEvents(),
     listQueueAll(),
+    getStatsResetAt(),
   ]);
 
-  const stats = kpis({ contacts, invites, events, queue });
+  const stats = kpis({ contacts, invites, events, queue, since: statsResetAt || undefined });
 
   if (q.export === 'csv' || q.action === 'export') {
     const invited = friendsByInviter(contacts);
@@ -199,6 +222,7 @@ export default async function handler(req, res) {
   json(res, 200, {
     ok: true,
     kpis: stats,
+    stats_reset_at: statsResetAt,
     contacts: contacts.map((c) => ({
       ...c,
       contacts_generes: stats.generated_by[c.id] || 0,

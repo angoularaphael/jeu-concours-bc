@@ -285,6 +285,26 @@ describe('kpis', () => {
     assert.equal(stats.generated_by[inviterId], 1);
     assert.equal(stats.amis_invites, 1);
   });
+
+  it('ignore les entrées antérieures à stats_reset_at', () => {
+    const since = '2026-09-10T12:00:00.000Z';
+    const stats = kpis({
+      since,
+      contacts: [
+        { id: '1', role: 'participant', status: 'inscrit', created_at: '2026-09-09T10:00:00.000Z', tickets: 1 },
+        { id: '2', role: 'participant', status: 'inscrit', created_at: '2026-09-10T13:00:00.000Z', tickets: 1 },
+      ],
+      invites: [],
+      events: [
+        { type: 'page_vue', created_at: '2026-09-09T10:00:00.000Z' },
+        { type: 'page_vue', created_at: '2026-09-10T13:00:00.000Z' },
+      ],
+      queue: [],
+    });
+    assert.equal(stats.visitors, 1);
+    assert.equal(stats.inscrits, 1);
+    assert.equal(stats.contacts_total, 1);
+  });
 });
 
 describe('verifyAdminLogin', () => {

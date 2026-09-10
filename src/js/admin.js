@@ -7,6 +7,8 @@ const sourcesEl = document.getElementById('sources');
 const rowsEl = document.getElementById('rows');
 const loginError = document.getElementById('login-error');
 const exportLink = document.getElementById('export');
+const resetStatsBtn = document.getElementById('reset-stats');
+const statsResetNote = document.getElementById('stats-reset-note');
 
 let lastFilters = {};
 const proofModal = document.getElementById('proof-modal');
@@ -38,6 +40,15 @@ async function load(filters = {}) {
   const res = await fetch(`/api/admin?${q}`);
   const data = await res.json().catch(() => ({}));
   if (!res.ok) throw new Error(data.error || 'unauthorized');
+  if (statsResetNote) {
+    if (data.stats_reset_at) {
+      statsResetNote.hidden = false;
+      statsResetNote.textContent = `Stats remises à zéro le ${fmtDate(data.stats_reset_at)} — les inscrits restent listés ci-dessous.`;
+    } else {
+      statsResetNote.hidden = true;
+      statsResetNote.textContent = '';
+    }
+  }
   kpisEl.replaceChildren(
     kpiCard('Visiteurs', data.kpis.visitors),
     kpiCard('Form. commencés', data.kpis.form_started),
@@ -196,6 +207,29 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
     loginError.hidden = false;
     loginError.textContent = 'Identifiants ou jeton refusés.';
     sessionStorage.removeItem(KEY);
+  }
+});
+
+resetStatsBtn?.addEventListener('click', async () => {
+  if (
+    !window.confirm(
+      'Remettre les compteurs à zéro ? Les inscriptions et contacts restent en base, seuls les indicateurs du tableau de bord sont réinitialisés.'
+    )
+  ) {
+    return;
+  }
+  try {
+    const res = await fetch(`/api/admin?token=${encodeURIComponent(token())}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'reset-stats' }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || !data.ok) throw new Error(data.error || 'reset');
+    await load(lastFilters);
+    window.alert('Stats réinitialisées.');
+  } catch (err) {
+    window.alert(err.message || 'Impossible de réinitialiser les stats.');
   }
 });
 
