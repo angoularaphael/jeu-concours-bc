@@ -44,7 +44,7 @@ process.env.DRY_RUN = '0';
 process.env.PUBLIC_URL = LIVE;
 process.env.RESEND_SENDER_NAME = process.env.RESEND_SENDER_NAME || 'David';
 process.env.RESEND_SENDER_EMAIL =
-  process.env.RESEND_SENDER_EMAIL || 'david@boxingcenter.fr';
+  process.env.RESEND_SENDER_EMAIL || 'no-reply@boxingcenter.fr';
 
 const SEND = process.argv.includes('--send');
 
