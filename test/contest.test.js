@@ -267,6 +267,40 @@ describe('enterContest', () => {
     assert.equal(second.ok, true, JSON.stringify(second));
     assert.equal(second.participant.status, 'inscription_finalisee');
   });
+
+  it('n’envoie pas de SMS de confirmation Hexagone MMA', async () => {
+    const { listPendingWa, enqueueWa, listQueueAll } = await import('../lib/store.js');
+    const { processWaQueue } = await import('../lib/contest.js');
+    resetMemoryStore();
+    const result = await enterContest(
+      {
+        ...valid,
+        telephone: '0677777777',
+        email: 'camille.hexagone@example.com',
+        friends: [],
+        consent_friends: false,
+      },
+      { publicUrl: 'http://127.0.0.1:5620', dryRun: true }
+    );
+    assert.equal(result.ok, true, JSON.stringify(result));
+    const pending = await listPendingWa(50);
+    assert.equal(pending.filter((j) => j.kind === 'confirmation').length, 0);
+    const camille = await getContactByPhoneKey('677777777');
+    assert.equal(camille.wa_status, 'skipped');
+    assert.equal(camille.wa_error, 'sms_disabled');
+
+    await enqueueWa({
+      kind: 'confirmation',
+      contact_id: camille.id,
+      phone: camille.telephone,
+      message: 'Votre inscription au jeu concours … Hexagone MMA est bien confirmée.',
+    });
+    const flushed = await processWaQueue({ dryRun: false, limit: 20 });
+    assert.equal(flushed.skipped >= 1, true);
+    assert.equal(flushed.sent, 0);
+    const after = await listQueueAll();
+    assert.equal(after.filter((j) => j.kind === 'confirmation' && j.status === 'pending').length, 0);
+  });
 });
 
 describe('kpis', () => {
