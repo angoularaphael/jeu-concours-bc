@@ -285,6 +285,7 @@ describe('enterContest', () => {
     assert.equal(result.ok, true, JSON.stringify(result));
     const pending = await listPendingWa(50);
     assert.equal(pending.filter((j) => j.kind === 'confirmation').length, 0);
+    assert.equal(pending.filter((j) => j.kind === 'invitation').length, 0);
     const camille = await getContactByPhoneKey('677777777');
     assert.equal(camille.wa_status, 'skipped');
     assert.equal(camille.wa_error, 'sms_disabled');
@@ -300,6 +301,16 @@ describe('enterContest', () => {
     assert.equal(flushed.sent, 0);
     const after = await listQueueAll();
     assert.equal(after.filter((j) => j.kind === 'confirmation' && j.status === 'pending').length, 0);
+    await enqueueWa({
+      kind: 'invitation',
+      contact_id: camille.id,
+      phone: camille.telephone,
+      message: 'Grâce à votre ami(e), jeu concours Hexagone MMA',
+    });
+    const flushedInv = await processWaQueue({ dryRun: false, limit: 20 });
+    assert.equal(flushedInv.sent, 0);
+    const afterInv = await listQueueAll();
+    assert.equal(afterInv.filter((j) => j.kind === 'invitation' && j.status === 'pending').length, 0);
   });
 });
 
